@@ -16,6 +16,7 @@ class ViewControllerTimer: UIViewController {
     @IBOutlet var stop: UIButton!
     @IBOutlet var rep: UIButton!
     @IBOutlet var rounds: UIButton!
+    @IBOutlet var numberRep: UILabel!
     
     
     var timer = Timer()
@@ -28,9 +29,13 @@ class ViewControllerTimer: UIViewController {
         pause.isHidden = true
         rep.isHidden = true
         stop.isHidden = true
+        numberRep.isHidden = true
+        
+//        numberRep.layer.cornerRadius = 50
+//        numberRep.clipsToBounds = true
         
         tmpStartTimeInterval = tmpTimeInterval
-        timeLabel.text = qq(tmp: tmpTimeInterval)
+        timeLabel.text = qq(time: tmpTimeInterval)
     }
     
     @IBAction func startAction(_ sender: UIButton) {
@@ -39,6 +44,7 @@ class ViewControllerTimer: UIViewController {
         start.isHidden = true
         stop.isHidden = true
         rounds.isHidden = true
+        numberRep.isHidden = false
             
         timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdate), userInfo: nil, repeats: true)
     }
@@ -61,17 +67,33 @@ class ViewControllerTimer: UIViewController {
         stop.isHidden = true
         start.isHidden = false
         rounds.isHidden = false
+        numberRep.isHidden = true
         
         timer.invalidate()
         
         tmpTimeInterval = tmpStartTimeInterval
-        timeLabel.text = qq(tmp: tmpStartTimeInterval)
+        timeLabel.text = qq(time: tmpStartTimeInterval)
     }
+    
+    var countRep = 0
     
     @IBAction func repAction(_ sender: UIButton) {
+        countRep += 1
+        numberRep.text = "\(countRep)"
         
+        changeCyanViewBackground()
     }
     
+    private func changeCyanViewBackground() {
+        let animation = CABasicAnimation(keyPath: #keyPath(CALayer.backgroundColor))
+        animation.duration = 0.3
+        
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeIn)
+        
+        view.layer.add(animation, forKey: "background")
+        view.layer.backgroundColor = .none
+        
+    }
         
     @objc
     func timerUpdate() {
@@ -80,7 +102,7 @@ class ViewControllerTimer: UIViewController {
         
         if tmpTimeInterval <= 0.0 {
             timer.invalidate()
-            timeLabel.text = qq(tmp: tmpStartTimeInterval)
+            timeLabel.text = qq(time: tmpStartTimeInterval)
             
             pause.isHidden = true
             start.isHidden = false
@@ -89,22 +111,18 @@ class ViewControllerTimer: UIViewController {
             stopAction(self)
         }
         
-        timeLabel.text = qq(tmp: tmpTimeInterval)
+        timeLabel.text = qq(time: tmpTimeInterval)
     }
     
-    func qq(tmp: Float) -> String {
-        let formatter = NumberFormatter()
-        formatter.minimumFractionDigits = 0
-        formatter.maximumFractionDigits = 2
+    func qq(time: Float) -> String {
         
-        let ss = String(format: "%02d", Int(tmp / 60))
-        let qq = String(format: "%02d", Int(tmp.truncatingRemainder(dividingBy: 60)))
+        let mm = String(format: "%02d", Int(time / 60))
+        let ss = String(format: "%02d", Int(time.truncatingRemainder(dividingBy: 60)))
 
-        let b = Int(tmp)
-        let gh = tmp - Float(b)
+        let b = Int(time)
+        let afterPoint = time - Float(b)
+        let mls = String(format: "%02d", Int(afterPoint * 100))
         
-        print("\(ss):\(qq):\(formatter.string(from: gh * 100 as NSNumber) ?? "n/a"), \(qq) ")
-        
-        return "\(ss):\(qq):\(formatter.string(from: gh * 100 as NSNumber) ?? "n/a")"
+        return "\(mm):\(ss):\(mls)"
     }
 }

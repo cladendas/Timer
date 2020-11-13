@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewControllerStopwatch: UIViewController {
 
     @IBOutlet var timeLabel: UILabel!
     @IBOutlet var start: UIButton!

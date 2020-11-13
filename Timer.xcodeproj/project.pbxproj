@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A0EC47B255EED1200D3AA5A /* ViewControllerTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0EC47A255EED1200D3AA5A /* ViewControllerTimer.swift */; };
 		6AD042D5255DB6570093FD13 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD042D4255DB6570093FD13 /* AppDelegate.swift */; };
 		6AD042D7255DB6570093FD13 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD042D6255DB6570093FD13 /* SceneDelegate.swift */; };
 		6AD042D9255DB6570093FD13 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD042D8255DB6570093FD13 /* ViewController.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6A0EC47A255EED1200D3AA5A /* ViewControllerTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerTimer.swift; sourceTree = "<group>"; };
 		6AD042D1255DB6570093FD13 /* Timer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Timer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AD042D4255DB6570093FD13 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6AD042D6255DB6570093FD13 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 				6AD042D4255DB6570093FD13 /* AppDelegate.swift */,
 				6AD042D6255DB6570093FD13 /* SceneDelegate.swift */,
 				6AD042D8255DB6570093FD13 /* ViewController.swift */,
+				6A0EC47A255EED1200D3AA5A /* ViewControllerTimer.swift */,
 				6AD042DA255DB6570093FD13 /* Main.storyboard */,
 				6AD042DD255DB65B0093FD13 /* Assets.xcassets */,
 				6AD042DF255DB65B0093FD13 /* LaunchScreen.storyboard */,
@@ -138,6 +141,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A0EC47B255EED1200D3AA5A /* ViewControllerTimer.swift in Sources */,
 				6AD042D9255DB6570093FD13 /* ViewController.swift in Sources */,
 				6AD042D5255DB6570093FD13 /* AppDelegate.swift in Sources */,
 				6AD042D7255DB6570093FD13 /* SceneDelegate.swift in Sources */,

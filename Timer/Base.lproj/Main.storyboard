@@ -10,7 +10,7 @@
         <!--Секундомер-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Timer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewControllerStopwatch" customModule="Timer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -20,7 +20,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="81.5" id="woB-AZ-2wy"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="38"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="68"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -133,7 +133,6 @@
                                 </prototypes>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                         <constraints>
                             <constraint firstItem="heW-mu-xyk" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="6Oh-3x-EJt"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="yvi-Bh-nep" secondAttribute="bottom" constant="8" id="Pxs-ys-Rgf"/>
@@ -188,15 +187,129 @@
         <!--Таймер-->
         <scene sceneID="3a4-lU-GrO">
             <objects>
-                <viewController id="H03-Vy-ev5" sceneMemberID="viewController">
+                <viewController id="H03-Vy-ev5" customClass="ViewControllerTimer" customModule="Timer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WKz-HW-Iqz">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00,00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DsW-yE-ruV" userLabel="Time Label">
+                                <rect key="frame" x="32" y="64" width="349" height="81.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="81.5" id="ApZ-7X-uZ2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="68"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oTV-Ds-g6v">
+                                <rect key="frame" x="32" y="705" width="100" height="100"/>
+                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="QrY-UJ-Wxk"/>
+                                    <constraint firstAttribute="width" constant="100" id="suu-n0-Cg2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                <state key="normal" title="Стоп">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="stopAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Iop-cV-B9b"/>
+                                    <action selector="stopAction:" destination="H03-Vy-ev5" eventType="touchUpInside" id="xDM-Fi-Sga"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jsv-DT-Fzd">
+                                <rect key="frame" x="281" y="705" width="100" height="100"/>
+                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="Bqb-ZS-guq"/>
+                                    <constraint firstAttribute="width" constant="100" id="Hbg-y9-rkl"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                <state key="normal" title="Пауза">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="pauseAction:" destination="H03-Vy-ev5" eventType="touchUpInside" id="Bk8-jh-lOG"/>
+                                    <action selector="pauseAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="FeC-2b-wfc"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z0f-He-gqr">
+                                <rect key="frame" x="281" y="705" width="100" height="100"/>
+                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="gdD-fW-PJz"/>
+                                    <constraint firstAttribute="width" constant="100" id="hPu-os-Cr5"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                <state key="normal" title="Старт">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="startAction:" destination="H03-Vy-ev5" eventType="touchUpInside" id="xFZ-Wy-5le"/>
+                                    <action selector="startAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="zAs-VJ-O3b"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tav-Ft-WK5">
+                                <rect key="frame" x="32" y="705" width="100" height="100"/>
+                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="aLK-cz-Qk3"/>
+                                    <constraint firstAttribute="height" constant="100" id="oki-ce-7tO"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                <state key="normal" title="Повтор">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="repAction:" destination="H03-Vy-ev5" eventType="touchUpInside" id="AHn-1j-cwV"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="oTV-Ds-g6v" firstAttribute="leading" secondItem="h0U-BU-0bC" secondAttribute="leading" constant="32" id="2kE-19-Dmh"/>
+                            <constraint firstItem="DsW-yE-ruV" firstAttribute="top" secondItem="h0U-BU-0bC" secondAttribute="top" constant="20" id="DVf-zK-vWS"/>
+                            <constraint firstItem="h0U-BU-0bC" firstAttribute="bottom" secondItem="Z0f-He-gqr" secondAttribute="bottom" constant="8" id="E7D-2H-GE5"/>
+                            <constraint firstItem="tav-Ft-WK5" firstAttribute="leading" secondItem="h0U-BU-0bC" secondAttribute="leading" constant="32" id="JHf-cD-4KF"/>
+                            <constraint firstItem="h0U-BU-0bC" firstAttribute="trailing" secondItem="Z0f-He-gqr" secondAttribute="trailing" constant="33" id="Mhf-Di-mkt"/>
+                            <constraint firstItem="h0U-BU-0bC" firstAttribute="trailing" secondItem="DsW-yE-ruV" secondAttribute="trailing" constant="33" id="UbX-Ew-usc"/>
+                            <constraint firstItem="h0U-BU-0bC" firstAttribute="bottom" secondItem="jsv-DT-Fzd" secondAttribute="bottom" constant="8" id="VIE-ix-LM8"/>
+                            <constraint firstItem="h0U-BU-0bC" firstAttribute="trailing" secondItem="jsv-DT-Fzd" secondAttribute="trailing" constant="33" id="VOm-Ql-2p5"/>
+                            <constraint firstItem="h0U-BU-0bC" firstAttribute="bottom" secondItem="oTV-Ds-g6v" secondAttribute="bottom" constant="8" id="nKh-g2-i3D"/>
+                            <constraint firstItem="DsW-yE-ruV" firstAttribute="leading" secondItem="h0U-BU-0bC" secondAttribute="leading" constant="32" id="uqy-vi-uM5"/>
+                            <constraint firstItem="h0U-BU-0bC" firstAttribute="bottom" secondItem="tav-Ft-WK5" secondAttribute="bottom" constant="8" id="wTG-hZ-1gr"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="h0U-BU-0bC"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Таймер" image="timer" catalog="system" id="uKc-IT-HOb"/>
                     <navigationItem key="navigationItem" id="5bJ-4K-qZ0"/>
+                    <connections>
+                        <outlet property="pause" destination="jsv-DT-Fzd" id="VVL-c2-UPs"/>
+                        <outlet property="rep" destination="tav-Ft-WK5" id="bQC-lE-a71"/>
+                        <outlet property="start" destination="Z0f-He-gqr" id="1fO-xb-nJg"/>
+                        <outlet property="stop" destination="oTV-Ds-g6v" id="sPh-5n-RgZ"/>
+                        <outlet property="timeLabel" destination="DsW-yE-ruV" id="Dwa-Pw-bsw"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xky-D3-Wjp" sceneMemberID="firstResponder"/>
             </objects>

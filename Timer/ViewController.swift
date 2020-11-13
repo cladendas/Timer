@@ -22,6 +22,13 @@ class ViewControllerStopwatch: UIViewController {
     
     var rounds = ""
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        pause.isHidden = true
+        round.isHidden = true
+        stop.isHidden = true
+    }
+    
     @IBAction func startAction(_ sender: UIButton) {
         pause.isHidden = false
         round.isHidden = false
@@ -66,10 +73,6 @@ class ViewControllerStopwatch: UIViewController {
         timeLabel.text = String(format: "00:%.2f", tmpTimeInterval)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        pause.isHidden = true
-        round.isHidden = true
-    }
+    
 }
 

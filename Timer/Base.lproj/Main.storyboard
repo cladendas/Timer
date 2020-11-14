@@ -193,9 +193,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DsW-yE-ruV" userLabel="Time Label">
-                                <rect key="frame" x="32" y="108" width="349" height="81.5"/>
+                                <rect key="frame" x="32" y="108" width="349" height="68"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="81.5" id="ApZ-7X-uZ2"/>
+                                    <constraint firstAttribute="height" constant="68" id="ApZ-7X-uZ2"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="68"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -299,10 +299,10 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <segue destination="yvf-6Z-Yjv" kind="show" id="gBw-wv-lE7"/>
+                                    <segue destination="yvf-6Z-Yjv" kind="show" id="Yja-nH-AXT"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BTx-EV-m7K">
+                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BTx-EV-m7K">
                                 <rect key="frame" x="32" y="597" width="100" height="100"/>
                                 <color key="backgroundColor" red="1" green="0.61587322339999995" blue="0.33858713759999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <accessibility key="accessibilityConfiguration">
@@ -322,6 +322,16 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Osl-UW-6cm" userLabel="Time Label">
+                                <rect key="frame" x="32" y="177" width="349" height="68"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="68" id="bUy-OK-Z3t"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="68"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <size key="shadowOffset" width="0.0" height="0.0"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -331,10 +341,13 @@
                             <constraint firstItem="h0U-BU-0bC" firstAttribute="bottom" secondItem="Z0f-He-gqr" secondAttribute="bottom" constant="8" id="E7D-2H-GE5"/>
                             <constraint firstItem="tav-Ft-WK5" firstAttribute="leading" secondItem="h0U-BU-0bC" secondAttribute="leading" constant="32" id="JHf-cD-4KF"/>
                             <constraint firstItem="h0U-BU-0bC" firstAttribute="trailing" secondItem="Z0f-He-gqr" secondAttribute="trailing" constant="33" id="Mhf-Di-mkt"/>
+                            <constraint firstItem="Osl-UW-6cm" firstAttribute="leading" secondItem="h0U-BU-0bC" secondAttribute="leading" constant="32" id="Nrc-65-A9j"/>
                             <constraint firstItem="h0U-BU-0bC" firstAttribute="trailing" secondItem="DsW-yE-ruV" secondAttribute="trailing" constant="33" id="UbX-Ew-usc"/>
                             <constraint firstItem="h0U-BU-0bC" firstAttribute="bottom" secondItem="jsv-DT-Fzd" secondAttribute="bottom" constant="8" id="VIE-ix-LM8"/>
                             <constraint firstItem="h0U-BU-0bC" firstAttribute="trailing" secondItem="jsv-DT-Fzd" secondAttribute="trailing" constant="33" id="VOm-Ql-2p5"/>
                             <constraint firstItem="oTV-Ds-g6v" firstAttribute="top" secondItem="BTx-EV-m7K" secondAttribute="bottom" constant="8" id="iZl-mW-ltq"/>
+                            <constraint firstItem="Osl-UW-6cm" firstAttribute="top" secondItem="DsW-yE-ruV" secondAttribute="bottom" constant="1" id="mEM-JK-buc"/>
+                            <constraint firstItem="h0U-BU-0bC" firstAttribute="trailing" secondItem="Osl-UW-6cm" secondAttribute="trailing" constant="33" id="mL4-CX-jKI"/>
                             <constraint firstItem="h0U-BU-0bC" firstAttribute="bottom" secondItem="oTV-Ds-g6v" secondAttribute="bottom" constant="8" id="nKh-g2-i3D"/>
                             <constraint firstItem="h0U-BU-0bC" firstAttribute="bottom" secondItem="iwj-UZ-BLc" secondAttribute="bottom" constant="8" id="smo-Cd-fX4"/>
                             <constraint firstItem="DsW-yE-ruV" firstAttribute="leading" secondItem="h0U-BU-0bC" secondAttribute="leading" constant="32" id="uqy-vi-uM5"/>
@@ -358,30 +371,56 @@
             </objects>
             <point key="canvasLocation" x="1850.7246376811595" y="548.4375"/>
         </scene>
-        <!--View Controller-->
+        <!--View Controller Rounds-->
         <scene sceneID="659-Kp-s7c">
             <objects>
-                <viewController id="yvf-6Z-Yjv" sceneMemberID="viewController">
+                <viewController id="yvf-6Z-Yjv" customClass="ViewControllerRounds" customModule="Timer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="AFJ-70-vzz">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="15" minValue="1" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="ZTF-Ef-eOB">
-                                <rect key="frame" x="18" y="193" width="361" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </slider>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ac0-qj-g3Y">
-                                <rect key="frame" x="186" y="127" width="42" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Кол-во раундов: 10" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Ww-3f-59n">
+                                <rect key="frame" x="20" y="122" width="174" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="n8s-eI-k4c">
+                                <rect key="frame" x="213" y="93" width="181" height="89"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            </pickerView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Время раунда: 00:45:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H7Z-dc-DiE">
+                                <rect key="frame" x="20" y="219" width="194" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5fU-bS-g9u">
+                                <rect key="frame" x="213" y="190" width="181" height="89"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            </pickerView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Время отдыха: 00:30:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0jy-6Z-07x">
+                                <rect key="frame" x="20" y="329" width="193" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jgF-rp-NJl">
+                                <rect key="frame" x="213" y="300" width="181" height="89"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            </pickerView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="lKL-uX-wrG"/>
                     </view>
                     <navigationItem key="navigationItem" id="kst-yg-P4G"/>
+                    <connections>
+                        <outlet property="numberOfRounds" destination="8Ww-3f-59n" id="RGS-Gp-uCb"/>
+                        <outlet property="picker" destination="n8s-eI-k4c" id="3L4-52-CCL"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ifD-AH-pN1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

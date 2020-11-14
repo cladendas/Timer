@@ -21,8 +21,10 @@ class ViewControllerTimer: UIViewController {
     
     var timer = Timer()
     
-    var tmpTimeInterval: Float = 15.94
+    ///время для таймера раунда (максимум 5999.99)
+    var tmpTimeInterval: Float = 5999.99
     var tmpStartTimeInterval: Float = 0.0
+    var countRep = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,11 +33,8 @@ class ViewControllerTimer: UIViewController {
         stop.isHidden = true
         numberRep.isHidden = true
         
-//        numberRep.layer.cornerRadius = 50
-//        numberRep.clipsToBounds = true
-        
         tmpStartTimeInterval = tmpTimeInterval
-        timeLabel.text = qq(time: tmpTimeInterval)
+        timeLabel.text = TimeFormatter.formatter(time: tmpTimeInterval)
     }
     
     @IBAction func startAction(_ sender: UIButton) {
@@ -58,8 +57,6 @@ class ViewControllerTimer: UIViewController {
         rounds.isHidden = false
         
         timer.invalidate()
-    
-//        timeLabel.text = String(format: "00:%.2f", tmpTimeInterval)
     }
 
     @IBAction func stopAction(_ sender: Any) {
@@ -68,31 +65,28 @@ class ViewControllerTimer: UIViewController {
         start.isHidden = false
         rounds.isHidden = false
         numberRep.isHidden = true
+        rep.isHidden = true
         
         timer.invalidate()
         
         tmpTimeInterval = tmpStartTimeInterval
-        timeLabel.text = qq(time: tmpStartTimeInterval)
+        timeLabel.text = TimeFormatter.formatter(time: tmpTimeInterval)
     }
     
-    var countRep = 0
-    
+    //Здесь погрешность в том, если будут выполняться какие-то быстрые двжения, требующие подсчёта (прыжки на скакалке, выбросы грифа, полуприседы). Обработка нажатия на кнопку не успевает
     @IBAction func repAction(_ sender: UIButton) {
         countRep += 1
         numberRep.text = "\(countRep)"
         
-        changeCyanViewBackground()
+        changeViewBackground()
     }
     
-    private func changeCyanViewBackground() {
-        let animation = CABasicAnimation(keyPath: #keyPath(CALayer.backgroundColor))
-        animation.duration = 0.3
-        
-        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeIn)
-        
-        view.layer.add(animation, forKey: "background")
-        view.layer.backgroundColor = .none
-        
+    private func changeViewBackground() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.view.backgroundColor = .black
+        }) { (anim) in
+            self.view.backgroundColor = .blue
+        }
     }
         
     @objc
@@ -102,27 +96,10 @@ class ViewControllerTimer: UIViewController {
         
         if tmpTimeInterval <= 0.0 {
             timer.invalidate()
-            timeLabel.text = qq(time: tmpStartTimeInterval)
-            
-            pause.isHidden = true
-            start.isHidden = false
-            rounds.isHidden = false
+            timeLabel.text = TimeFormatter.formatter(time: tmpTimeInterval)
             
             stopAction(self)
         }
-        
-        timeLabel.text = qq(time: tmpTimeInterval)
-    }
-    
-    func qq(time: Float) -> String {
-        
-        let mm = String(format: "%02d", Int(time / 60))
-        let ss = String(format: "%02d", Int(time.truncatingRemainder(dividingBy: 60)))
-
-        let b = Int(time)
-        let afterPoint = time - Float(b)
-        let mls = String(format: "%02d", Int(afterPoint * 100))
-        
-        return "\(mm):\(ss):\(mls)"
+        timeLabel.text = TimeFormatter.formatter(time: tmpTimeInterval)
     }
 }

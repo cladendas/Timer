@@ -24,12 +24,12 @@ class ViewControllerTimer: UIViewController {
     var timerForRes = Timer()
     
     ///время для таймера раунда (максимум 5999.99)
-    var tmpTimeForRound: Float = 1.1
-    var tmpTimeForRes: Float = 1.1
+    var tmpTimeForRound: Float = 1.0
+    var tmpTimeForRes: Float = 0.4
     var tmpStartTimeInterval: Float = 0.0
     var tmpRes: Float = 0.0
     var countOfRounds = 2
-    var countRep = 1
+    var countRep = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +42,7 @@ class ViewControllerTimer: UIViewController {
         tmpRes = tmpTimeForRes
         timeLabel.text = TimeFormatter.formatter(time: tmpTimeForRound)
         timeLabelForRes.text = TimeFormatter.formatter(time: tmpTimeForRes)
+        numberRep.text = String(countRep)
     }
     
     @IBAction func startAction(_ sender: UIButton) {
@@ -52,9 +53,7 @@ class ViewControllerTimer: UIViewController {
         rounds.isHidden = true
         numberRep.isHidden = false
         
-        if countOfRounds > 0 {
-            timerForRounds = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRounds), userInfo: nil, repeats: true)
-        }
+        timerForRounds = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRounds), userInfo: nil, repeats: true)
     }
         
         
@@ -64,11 +63,14 @@ class ViewControllerTimer: UIViewController {
         stop.isHidden = false
         start.isHidden = false
         rounds.isHidden = false
-        
+
         timerForRounds.invalidate()
     }
 
     @IBAction func stopAction(_ sender: UIButton) {
+        timerForRounds.invalidate()
+        timerForRes.invalidate()
+        
         pause.isHidden = true
         stop.isHidden = true
         start.isHidden = false
@@ -76,10 +78,11 @@ class ViewControllerTimer: UIViewController {
         numberRep.isHidden = true
         rep.isHidden = true
         
-        timerForRounds.invalidate()
-        
         tmpTimeForRound = tmpStartTimeInterval
+        tmpTimeForRes = tmpRes
         timeLabel.text = TimeFormatter.formatter(time: tmpTimeForRound)
+        timeLabelForRes.text = TimeFormatter.formatter(time: tmpTimeForRes)
+//        print("stopQ", tmpTimeForRound, tmpStartTimeInterval)
     }
     
     //Здесь погрешность в том, если будут выполняться какие-то быстрые двжения, требующие подсчёта (прыжки на скакалке, выбросы грифа, полуприседы). Обработка нажатия на кнопку не успевает
@@ -102,42 +105,34 @@ class ViewControllerTimer: UIViewController {
         
     @objc
     func timerUpdateForRounds() {
-        
         tmpTimeForRound -= 00.01
-        
-        if tmpTimeForRound <= 0.0 && countOfRounds == 0 {
-            timerForRounds.invalidate()
-            timeLabel.text = TimeFormatter.formatter(time: tmpTimeForRound)
-            stopAction(stop)
-        } else if tmpTimeForRound <= 0.0 && countOfRounds > 0 {
+        if tmpTimeForRound <= 0.0 && countOfRounds > 0 {
             timerForRounds.invalidate()
             tmpTimeForRound = tmpStartTimeInterval
             countOfRounds -= 1
-            print("!!! ",countOfRounds)
             startRes()
+        } else {
+            timeLabel.text = TimeFormatter.formatter(time: tmpTimeForRound)
         }
-        
-        timeLabel.text = TimeFormatter.formatter(time: tmpTimeForRound)
     }
     
     func startRes() {
-        
         if countOfRounds > 0 {
-                    timerForRes = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRest), userInfo: nil, repeats: true)
+            timerForRes = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRest), userInfo: nil, repeats: true)
+        } else {
+            stopAction(stop)
         }
     }
     
     @objc
     func timerUpdateForRest() {
         tmpTimeForRes -= 00.01
-        
         if tmpTimeForRes <= 0.0 {
             timerForRes.invalidate()
-            timeLabelForRes.text = TimeFormatter.formatter(time: tmpTimeForRes)
-            startAction(start)
             tmpTimeForRes = tmpRes
+            startAction(start)
+        } else {
+            timeLabelForRes.text = TimeFormatter.formatter(time: tmpTimeForRes)
         }
-        
-        timeLabelForRes.text = TimeFormatter.formatter(time: tmpTimeForRes)
     }
 }

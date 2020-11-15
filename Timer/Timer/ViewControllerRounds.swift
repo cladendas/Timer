@@ -9,9 +9,8 @@
 import UIKit
 
 class ViewControllerRounds: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
-
-    var pickerDataNumOfRounds: [String] = [String]()
     
+    var pickerDataNumOfRounds: [String] = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,12 +19,21 @@ class ViewControllerRounds: UIViewController, UIPickerViewDelegate, UIPickerView
             pickerDataNumOfRounds.append(String(i))
         }
         
-        self.picker.delegate = self
-        self.picker.dataSource = self
+        self.pickerTimeOfRounds.delegate = self
+        self.pickerTimeOfRounds.dataSource = self
+        
     }
-    @IBOutlet var numberOfRounds: UILabel!
     
-    @IBOutlet var picker: UIPickerView!
+    @IBOutlet var numberOfRounds: UILabel!
+    @IBOutlet var pickerTimeOfRounds: UIPickerView!
+    @IBOutlet var pickerTimeOfRest: UILabel!
+    
+    @IBAction func stepperForNumOfRoundsAction(_ sender: UIStepper) {
+        
+        var value = String(format: "%.f", sender.value)
+        
+        numberOfRounds.text = "Кол-во раундов: \(value)"
+    }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1

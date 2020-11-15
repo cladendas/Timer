@@ -12,6 +12,7 @@ import Foundation
 class TimeFormatter {
     
     static func formatter(time: Float) -> String {
+        
         let mm = String(format: "%02d", Int(time / 60))
         let ss = String(format: "%02d", Int(time.truncatingRemainder(dividingBy: 60)))
 

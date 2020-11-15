@@ -192,7 +192,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DsW-yE-ruV" userLabel="Time Label">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DsW-yE-ruV" userLabel="Time Label">
                                 <rect key="frame" x="61.5" y="108" width="291.5" height="68"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="68" id="ApZ-7X-uZ2"/>
@@ -323,7 +323,7 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="clipsToBounds" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Osl-UW-6cm" userLabel="Time Label">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Osl-UW-6cm" userLabel="Time Label">
                                 <rect key="frame" x="61.5" y="177" width="291.5" height="68"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="68" id="bUy-OK-Z3t"/>
@@ -334,15 +334,27 @@
                                 <nil key="highlightedColor"/>
                                 <size key="shadowOffset" width="0.0" height="0.0"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Раундов 1 / 5" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bpT-m9-eQ6">
+                                <rect key="frame" x="56.5" y="253" width="301" height="76"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="301" id="Up7-Bv-QTg"/>
+                                    <constraint firstAttribute="height" constant="76" id="gh3-jE-NJI"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="52"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                         <constraints>
                             <constraint firstItem="oTV-Ds-g6v" firstAttribute="leading" secondItem="h0U-BU-0bC" secondAttribute="leading" constant="32" id="2kE-19-Dmh"/>
                             <constraint firstItem="BTx-EV-m7K" firstAttribute="leading" secondItem="h0U-BU-0bC" secondAttribute="leading" constant="32" id="36C-CS-gfV"/>
                             <constraint firstItem="DsW-yE-ruV" firstAttribute="top" secondItem="h0U-BU-0bC" secondAttribute="top" constant="20" id="DVf-zK-vWS"/>
                             <constraint firstItem="h0U-BU-0bC" firstAttribute="bottom" secondItem="Z0f-He-gqr" secondAttribute="bottom" constant="8" id="E7D-2H-GE5"/>
                             <constraint firstItem="tav-Ft-WK5" firstAttribute="leading" secondItem="h0U-BU-0bC" secondAttribute="leading" constant="32" id="JHf-cD-4KF"/>
+                            <constraint firstItem="bpT-m9-eQ6" firstAttribute="centerX" secondItem="WKz-HW-Iqz" secondAttribute="centerX" id="Jj0-hy-USW"/>
                             <constraint firstItem="h0U-BU-0bC" firstAttribute="trailing" secondItem="Z0f-He-gqr" secondAttribute="trailing" constant="33" id="Mhf-Di-mkt"/>
+                            <constraint firstItem="bpT-m9-eQ6" firstAttribute="top" secondItem="Osl-UW-6cm" secondAttribute="bottom" constant="8" id="NSJ-Bv-8D4"/>
                             <constraint firstItem="h0U-BU-0bC" firstAttribute="bottom" secondItem="jsv-DT-Fzd" secondAttribute="bottom" constant="8" id="VIE-ix-LM8"/>
                             <constraint firstItem="h0U-BU-0bC" firstAttribute="trailing" secondItem="jsv-DT-Fzd" secondAttribute="trailing" constant="33" id="VOm-Ql-2p5"/>
                             <constraint firstItem="DsW-yE-ruV" firstAttribute="centerX" secondItem="WKz-HW-Iqz" secondAttribute="centerX" id="Ykv-2v-v1T"/>
@@ -365,6 +377,7 @@
                         <outlet property="start" destination="Z0f-He-gqr" id="1fO-xb-nJg"/>
                         <outlet property="stop" destination="oTV-Ds-g6v" id="sPh-5n-RgZ"/>
                         <outlet property="timeLabel" destination="DsW-yE-ruV" id="Dwa-Pw-bsw"/>
+                        <outlet property="timeLabelForRes" destination="Osl-UW-6cm" id="Ece-on-t1M"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xky-D3-Wjp" sceneMemberID="firstResponder"/>

@@ -11,6 +11,7 @@ import UIKit
 class ViewControllerTimer: UIViewController {
     
     @IBOutlet var timeLabel: UILabel!
+    @IBOutlet var timeLabelForRes: UILabel!
     @IBOutlet var start: UIButton!
     @IBOutlet var pause: UIButton!
     @IBOutlet var stop: UIButton!
@@ -19,12 +20,16 @@ class ViewControllerTimer: UIViewController {
     @IBOutlet var numberRep: UILabel!
     
     
-    var timer = Timer()
+    var timerForRounds = Timer()
+    var timerForRes = Timer()
     
     ///время для таймера раунда (максимум 5999.99)
-    var tmpTimeInterval: Float = 5999.99
+    var tmpTimeForRound: Float = 1.1
+    var tmpTimeForRes: Float = 1.1
     var tmpStartTimeInterval: Float = 0.0
-    var countRep = 0
+    var tmpRes: Float = 0.0
+    var countOfRounds = 2
+    var countRep = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,8 +38,10 @@ class ViewControllerTimer: UIViewController {
         stop.isHidden = true
         numberRep.isHidden = true
         
-        tmpStartTimeInterval = tmpTimeInterval
-        timeLabel.text = TimeFormatter.formatter(time: tmpTimeInterval)
+        tmpStartTimeInterval = tmpTimeForRound
+        tmpRes = tmpTimeForRes
+        timeLabel.text = TimeFormatter.formatter(time: tmpTimeForRound)
+        timeLabelForRes.text = TimeFormatter.formatter(time: tmpTimeForRes)
     }
     
     @IBAction func startAction(_ sender: UIButton) {
@@ -44,8 +51,10 @@ class ViewControllerTimer: UIViewController {
         stop.isHidden = true
         rounds.isHidden = true
         numberRep.isHidden = false
-            
-        timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdate), userInfo: nil, repeats: true)
+        
+        if countOfRounds > 0 {
+            timerForRounds = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRounds), userInfo: nil, repeats: true)
+        }
     }
         
         
@@ -56,10 +65,10 @@ class ViewControllerTimer: UIViewController {
         start.isHidden = false
         rounds.isHidden = false
         
-        timer.invalidate()
+        timerForRounds.invalidate()
     }
 
-    @IBAction func stopAction(_ sender: Any) {
+    @IBAction func stopAction(_ sender: UIButton) {
         pause.isHidden = true
         stop.isHidden = true
         start.isHidden = false
@@ -67,10 +76,10 @@ class ViewControllerTimer: UIViewController {
         numberRep.isHidden = true
         rep.isHidden = true
         
-        timer.invalidate()
+        timerForRounds.invalidate()
         
-        tmpTimeInterval = tmpStartTimeInterval
-        timeLabel.text = TimeFormatter.formatter(time: tmpTimeInterval)
+        tmpTimeForRound = tmpStartTimeInterval
+        timeLabel.text = TimeFormatter.formatter(time: tmpTimeForRound)
     }
     
     //Здесь погрешность в том, если будут выполняться какие-то быстрые двжения, требующие подсчёта (прыжки на скакалке, выбросы грифа, полуприседы). Обработка нажатия на кнопку не успевает
@@ -81,25 +90,54 @@ class ViewControllerTimer: UIViewController {
         changeViewBackground()
     }
     
+    ///Анимация, которая меняет цвет фона, чтобы пользователь мог увидеть, что кнопка "Повтор" была нажата
+    ///Как развитие: можно сделать подсчёт повторений по голосовой команде или при включённом видео, которое анализируется и ведётся подсчёт повторений
     private func changeViewBackground() {
         UIView.animate(withDuration: 0.2, animations: {
-            self.view.backgroundColor = .black
-        }) { (anim) in
             self.view.backgroundColor = .blue
+        }) { (anim) in
+            self.view.backgroundColor = .black
         }
     }
         
     @objc
-    func timerUpdate() {
+    func timerUpdateForRounds() {
         
-        tmpTimeInterval -= 00.01
+        tmpTimeForRound -= 00.01
         
-        if tmpTimeInterval <= 0.0 {
-            timer.invalidate()
-            timeLabel.text = TimeFormatter.formatter(time: tmpTimeInterval)
-            
-            stopAction(self)
+        if tmpTimeForRound <= 0.0 && countOfRounds == 0 {
+            timerForRounds.invalidate()
+            timeLabel.text = TimeFormatter.formatter(time: tmpTimeForRound)
+            stopAction(stop)
+        } else if tmpTimeForRound <= 0.0 && countOfRounds > 0 {
+            timerForRounds.invalidate()
+            tmpTimeForRound = tmpStartTimeInterval
+            countOfRounds -= 1
+            print("!!! ",countOfRounds)
+            startRes()
         }
-        timeLabel.text = TimeFormatter.formatter(time: tmpTimeInterval)
+        
+        timeLabel.text = TimeFormatter.formatter(time: tmpTimeForRound)
+    }
+    
+    func startRes() {
+        
+        if countOfRounds > 0 {
+                    timerForRes = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRest), userInfo: nil, repeats: true)
+        }
+    }
+    
+    @objc
+    func timerUpdateForRest() {
+        tmpTimeForRes -= 00.01
+        
+        if tmpTimeForRes <= 0.0 {
+            timerForRes.invalidate()
+            timeLabelForRes.text = TimeFormatter.formatter(time: tmpTimeForRes)
+            startAction(start)
+            tmpTimeForRes = tmpRes
+        }
+        
+        timeLabelForRes.text = TimeFormatter.formatter(time: tmpTimeForRes)
     }
 }

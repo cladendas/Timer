@@ -38,7 +38,7 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
         start.isHidden = true
         stop.isHidden = true
         
-        timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdate), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdate), userInfo: Date(), repeats: true)
     }
     
     //Когда свайпишь таблицу с кругами, то отсчёт времени останавливается, а когда отпускаешь - время идёд дальше, а таблица при нажатии на кнопку "Круг" не пролистывается к последнему значению

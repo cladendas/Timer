@@ -21,19 +21,23 @@ class ViewControllerRounds: UIViewController, UIPickerViewDelegate, UIPickerView
         
         self.pickerTimeOfRounds.delegate = self
         self.pickerTimeOfRounds.dataSource = self
-        
     }
+    
+    var clouserNumOfRounds: ((Int) -> Void)?
     
     @IBOutlet var numberOfRounds: UILabel!
     @IBOutlet var pickerTimeOfRounds: UIPickerView!
     @IBOutlet var pickerTimeOfRest: UILabel!
     
+    
+    
     @IBAction func stepperForNumOfRoundsAction(_ sender: UIStepper) {
-        
-        var value = String(format: "%.f", sender.value)
-        
-        numberOfRounds.text = "Кол-во раундов: \(value)"
+        let tmpValue = Int(sender.value)
+        clouserNumOfRounds?(tmpValue)
+        numberOfRounds.text = "Кол-во раундов: \(tmpValue)"
     }
+    
+    
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1

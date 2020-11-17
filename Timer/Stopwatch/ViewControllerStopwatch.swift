@@ -13,7 +13,10 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
     var rounds: [String] = []
     var timer = Timer()
     
-    var tmpTimeInterval: Float = 00.00
+    ///Текущее время
+    var currentTime: Float = 00.00
+    ///Переменная для фиксации значения текущего времени
+    var tmpTime: Float = 00.00
 
     @IBOutlet var timeLabel: UILabel!
     @IBOutlet var start: UIButton!
@@ -21,12 +24,14 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet var pause: UIButton!
     @IBOutlet var stop: UIButton!
     @IBOutlet var tableViewRounds: UITableView!
+    @IBOutlet var continueLabel: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         pause.isHidden = true
         round.isHidden = true
         stop.isHidden = true
+        continueLabel.isHidden = true
         
         tableViewRounds.delegate = self
         tableViewRounds.dataSource = self
@@ -39,32 +44,51 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
         stop.isHidden = true
         
         timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdate), userInfo: Date(), repeats: true)
+        
+        //Позволяет обрабатывать события в интерфейсе. Здесь: чтобы скроллинг таблицы не останавливает таймер
+        RunLoop.main.add(timer, forMode: RunLoop.Mode.common)
     }
     
     //Когда свайпишь таблицу с кругами, то отсчёт времени останавливается, а когда отпускаешь - время идёд дальше, а таблица при нажатии на кнопку "Круг" не пролистывается к последнему значению
     @IBAction func roundAction(_ sender: UIButton) {
-        let round = TimeFormatter.formatter(time: tmpTimeInterval)
+        let round = TimeFormatter.formatter(time: currentTime)
         rounds.insert(round, at: 0)
         tableViewRounds.reloadData()
+        
+        currentTime = tmpTime
+        timerUpdate()
+        tmpTime = 00.00
     }
     
     @IBAction func pauseAction(_ sender: UIButton) {
         round.isHidden = true
         pause.isHidden = true
         stop.isHidden = false
-        start.isHidden = false
-        
+        continueLabel.isHidden = false
+        tmpTime = currentTime
         timer.invalidate()
         
-        timeLabel.text = TimeFormatter.formatter(time: tmpTimeInterval)
+        timeLabel.text = TimeFormatter.formatter(time: currentTime)
     }
-
+    
+    @IBAction func continueAction(_ sender: UIButton) {
+        round.isHidden = false
+        pause.isHidden = true
+        stop.isHidden = true
+        continueLabel.isHidden = true
+        currentTime = tmpTime
+        timerUpdate()
+        tmpTime = 00.00
+    }
+    
     @IBAction func stopAction(_ sender: Any) {
         pause.isHidden = true
         start.isHidden = false
+        continueLabel.isHidden = true
         
         timer.invalidate()
-        tmpTimeInterval = 00.00
+        currentTime = 00.00
+        tmpTime = 00.00
         
         timeLabel.text = "00:00:00"
         rounds = []
@@ -73,8 +97,8 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
     
     @objc
     func timerUpdate() {
-        tmpTimeInterval += 00.01
-        timeLabel.text = TimeFormatter.formatter(time: tmpTimeInterval)
+        currentTime += 00.01
+        timeLabel.text = TimeFormatter.formatter(time: currentTime)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -82,12 +106,21 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CellStopwatch
 
         //Фиксация времен круга идёт в формате "номер круга) MM:ss:msms
         //Номер круга выводится, как результат разницы rounds.count - indexPath.row
-        //Не разобрался, почему если номер круга обозначать, как rounds.count, то это значениче выставляется во всех ячейках
-        cell.textLabel?.text = "\(rounds.count - indexPath.row)) \(rounds[indexPath.row])"
+        let tmpRound = "\(rounds.count - indexPath.row) круг"
+        let tmpTime = "\(rounds[indexPath.row])"
+        var tmpBest = ""
+        
+        if rounds[indexPath.row] == rounds.min() {
+            tmpBest = "Лучший"
+        } else if rounds[indexPath.row] == rounds.max() {
+            tmpBest = "Худший"
+        }
+        
+        cell.initCell(round: tmpRound, time: tmpTime, best: tmpBest)
         
         return cell
     }

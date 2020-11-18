@@ -8,47 +8,42 @@
 
 import UIKit
 
-class ViewControllerRounds: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class ViewControllerRounds: UIViewController {
     
-    var pickerDataNumOfRounds: [String] = [String]()
+    @IBOutlet var numberOfRounds: UILabel!
+    @IBOutlet var timeForRound: UILabel!
+    @IBOutlet var timeForRes: UILabel!
     
+    ///Кол-во раундов
+    var clouserNumOfRounds: ((Int) -> Void)?
+    ///Время раунда
+    var clouserTimeForRound: ((Double) -> Void)?
+    ///Время отдыха
+    var clouserTimeForRes: ((Double) -> Void)?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        for i in 0...100 {
-            pickerDataNumOfRounds.append(String(i))
-        }
-        
-        self.pickerTimeOfRounds.delegate = self
-        self.pickerTimeOfRounds.dataSource = self
+        clouserNumOfRounds?(1)
+        clouserTimeForRound?(5.0)
+        clouserTimeForRes?(5.0)
     }
     
-    var clouserNumOfRounds: ((Int) -> Void)?
-    
-    @IBOutlet var numberOfRounds: UILabel!
-    @IBOutlet var pickerTimeOfRounds: UIPickerView!
-    @IBOutlet var pickerTimeOfRest: UILabel!
-    
-    @IBAction func stepperForNumOfRoundsAction(_ sender: UIStepper) {
+    @IBAction func stepperForNumForRoundsAction(_ sender: UIStepper) {
         let tmpValue = Int(sender.value)
         clouserNumOfRounds?(tmpValue)
         numberOfRounds.text = "Кол-во раундов: \(tmpValue)"
     }
     
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
+    @IBAction func stepperForTimeForRoundsAction(_ sender: UIStepper) {
+        let tmpValue = TimeFormatter.formatter(time: sender.value)
+        clouserTimeForRound?(sender.value)
+        timeForRound.text = "Время раунда: \(tmpValue)"
     }
     
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        pickerDataNumOfRounds.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerDataNumOfRounds[row]
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        numberOfRounds.text = "Раунды: \(pickerDataNumOfRounds[row])"
+    @IBAction func stepperForTimeForResAction(_ sender: UIStepper) {
+        let tmpValue = TimeFormatter.formatter(time: sender.value)
+        clouserTimeForRes?(sender.value)
+        timeForRes.text = "Время отдыха: \(tmpValue)"
     }
 }

@@ -14,9 +14,9 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
     var timer = Timer()
     
     ///Текущее время
-    var currentTime: Float = 00.00
+    var currentTime: Double = 00.00
     ///Переменная для фиксации значения текущего времени
-    var tmpTime: Float = 00.00
+    var tmpTime: Double = 00.00
 
     @IBOutlet var timeLabel: UILabel!
     @IBOutlet var start: UIButton!
@@ -35,6 +35,9 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
         
         tableViewRounds.delegate = self
         tableViewRounds.dataSource = self
+        
+        timeLabel.font = UIFont.monospacedDigitSystemFont(
+        ofSize: 70, weight: .regular)
     }
     
     @IBAction func startAction(_ sender: UIButton) {

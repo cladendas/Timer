@@ -23,8 +23,8 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet var round: UIButton!
     @IBOutlet var pause: UIButton!
     @IBOutlet var stop: UIButton!
-    @IBOutlet var tableViewRounds: UITableView!
     @IBOutlet var continueLabel: UIButton!
+    @IBOutlet var tableViewRounds: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()

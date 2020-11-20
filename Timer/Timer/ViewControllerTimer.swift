@@ -76,46 +76,25 @@ class ViewControllerTimer: UIViewController {
     
     //Здесь захватывается numberOfRounds, чтобы выставить в него кол-во раундов
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if case let controller as ViewControllerRounds = segue.destination, segue.identifier == "Rounds" {
-//
-//            controller.clouserNumOfRounds = { [unowned self] num in
-//                self.numberOfRounds.text = "Раундов \(String(num))/\(String(num))"
-//                self.countOfRounds = num
-//                self.tmpCountOfRounds = num
-//            }
-//
-//            controller.clouserTimeForRound = { [unowned self] time in
-//                self.timeLabel.text = TimeFormatter.formatter(time: time)
-//                self.timeForRound = time
-//                self.tmpTimeForRound = time
-//            }
-//
-//            controller.clouserTimeForRes = { [unowned self] time in
-//                self.timeLabelForRes.text = TimeFormatter.formatter(time: time)
-//                self.timeForRes = time
-//                self.tmpTimeForRes = time
-//            }
-//        }
-        
-        if case let controller as TableViewControllerRounds = segue.destination, segue.identifier == "Rounds" {
+        if case let controller as ViewControllerRounds = segue.destination, segue.identifier == "Rounds" {
 
-//            controller.clouserNumOfRounds = { [unowned self] num in
-//                self.numberOfRounds.text = "Раундов \(String(num))/\(String(num))"
-//                self.countOfRounds = num
-//                self.tmpCountOfRounds = num
-//            }
-//
-//            controller.clouserTimeForRound = { [unowned self] time in
-//                self.timeLabel.text = TimeFormatter.formatter(time: time)
-//                self.timeForRound = time
-//                self.tmpTimeForRound = time
-//            }
-//
-//            controller.clouserTimeForRes = { [unowned self] time in
-//                self.timeLabelForRes.text = TimeFormatter.formatter(time: time)
-//                self.timeForRes = time
-//                self.tmpTimeForRes = time
-//            }
+            controller.clouserNumOfRounds = { [unowned self] num in
+                self.numberOfRounds.text = "Раундов \(String(num))/\(String(num))"
+                self.countOfRounds = num
+                self.tmpCountOfRounds = num
+            }
+
+            controller.clouserTimeForRound = { [unowned self] time in
+                self.timeLabel.text = TimeFormatter.formatter(time: time)
+                self.timeForRound = time
+                self.tmpTimeForRound = time
+            }
+
+            controller.clouserTimeForRes = { [unowned self] time in
+                self.timeLabelForRes.text = TimeFormatter.formatter(time: time)
+                self.timeForRes = time
+                self.tmpTimeForRes = time
+            }
         }
     }
     

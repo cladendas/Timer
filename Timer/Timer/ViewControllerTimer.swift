@@ -8,6 +8,7 @@
 
 import UIKit
 
+///Класс таймера
 class ViewControllerTimer: UIViewController {
     
     @IBOutlet var timeLabel: UILabel!
@@ -43,10 +44,12 @@ class ViewControllerTimer: UIViewController {
     private var tmpCountOfRounds = 0
     ///Кол-во выполненных повторений
     private var countRep = 0
-    
-    var currentTimeOfRounds: Double = 00.00
+    ///Текущее время раунда
+    var currentTimeOfRound: Double = 00.00
+    ///Текущее время отдыха
     var currentTimeOfRes: Double = 00.00
 
+    var vc = ViewControllerRounds()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,27 +76,50 @@ class ViewControllerTimer: UIViewController {
     
     //Здесь захватывается numberOfRounds, чтобы выставить в него кол-во раундов
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if case let controller as ViewControllerRounds = segue.destination, segue.identifier == "Rounds" {
-            
-            controller.clouserNumOfRounds = { [unowned self] num in
-                self.numberOfRounds.text = "Раундов \(String(num))/\(String(num))"
-                self.countOfRounds = num
-                self.tmpCountOfRounds = num
-            }
-            
-            controller.clouserTimeForRound = { [unowned self] time in
-                self.timeLabel.text = TimeFormatter.formatter(time: time)
-                self.timeForRound = time
-                self.tmpTimeForRound = time
-            }
-            
-            controller.clouserTimeForRes = { [unowned self] time in
-                self.timeLabelForRes.text = TimeFormatter.formatter(time: time)
-                self.timeForRes = time
-                self.tmpTimeForRes = time
-            }
+//        if case let controller as ViewControllerRounds = segue.destination, segue.identifier == "Rounds" {
+//
+//            controller.clouserNumOfRounds = { [unowned self] num in
+//                self.numberOfRounds.text = "Раундов \(String(num))/\(String(num))"
+//                self.countOfRounds = num
+//                self.tmpCountOfRounds = num
+//            }
+//
+//            controller.clouserTimeForRound = { [unowned self] time in
+//                self.timeLabel.text = TimeFormatter.formatter(time: time)
+//                self.timeForRound = time
+//                self.tmpTimeForRound = time
+//            }
+//
+//            controller.clouserTimeForRes = { [unowned self] time in
+//                self.timeLabelForRes.text = TimeFormatter.formatter(time: time)
+//                self.timeForRes = time
+//                self.tmpTimeForRes = time
+//            }
+//        }
+        
+        if case let controller as TableViewControllerRounds = segue.destination, segue.identifier == "Rounds" {
+
+//            controller.clouserNumOfRounds = { [unowned self] num in
+//                self.numberOfRounds.text = "Раундов \(String(num))/\(String(num))"
+//                self.countOfRounds = num
+//                self.tmpCountOfRounds = num
+//            }
+//
+//            controller.clouserTimeForRound = { [unowned self] time in
+//                self.timeLabel.text = TimeFormatter.formatter(time: time)
+//                self.timeForRound = time
+//                self.tmpTimeForRound = time
+//            }
+//
+//            controller.clouserTimeForRes = { [unowned self] time in
+//                self.timeLabelForRes.text = TimeFormatter.formatter(time: time)
+//                self.timeForRes = time
+//                self.tmpTimeForRes = time
+//            }
         }
     }
+    
+    
     
     @IBAction func startAction(_ sender: UIButton) {
         pause.isHidden = false
@@ -103,7 +129,7 @@ class ViewControllerTimer: UIViewController {
         rounds.isHidden = true
         numberRep.isHidden = false
         
-        timerForRound = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRounds), userInfo: nil, repeats: true)
+        timerForRound = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRound), userInfo: nil, repeats: true)
     }
         
     @IBAction func pauseAction(_ sender: UIButton) {
@@ -113,9 +139,9 @@ class ViewControllerTimer: UIViewController {
         rounds.isHidden = false
         continueLabel.isHidden = false
         
-        currentTimeOfRounds = timeForRound
+        currentTimeOfRound = timeForRound
         currentTimeOfRes = timeForRes
-
+        
         timerForRound.invalidate()
         timerForRes.invalidate()
     }
@@ -128,24 +154,23 @@ class ViewControllerTimer: UIViewController {
         rounds.isHidden = true
         continueLabel.isHidden = true
 
-        if timeForRound > 0 {
-            timeForRound = currentTimeOfRounds
+        if timeForRound != tmpTimeForRound {
+            timeForRound = currentTimeOfRound
+
+            timerForRound = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRound), userInfo: nil, repeats: true)
             
-            timerUpdateForRounds()
-            
-            currentTimeOfRounds = 00.00
+            currentTimeOfRound = 00.00
         }
         
-        if timeForRes > 0 {
+        if timeForRes != tmpTimeForRes {
             timeForRes = currentTimeOfRes
-            
-            timerUpdateForRes()
+
+            timerForRes = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRes), userInfo: nil, repeats: true)
             
             currentTimeOfRes = 00.00
         }
     }
     
-
     @IBAction func stopAction(_ sender: UIButton) {
         timerForRound.invalidate()
         timerForRes.invalidate()
@@ -193,7 +218,7 @@ class ViewControllerTimer: UIViewController {
     }
     
     @objc
-    private func timerUpdateForRounds() {
+    private func timerUpdateForRound() {
         timeForRound -= 00.01
         if timeForRound <= 0.0 && countOfRounds > 0 {
             timerForRound.invalidate()

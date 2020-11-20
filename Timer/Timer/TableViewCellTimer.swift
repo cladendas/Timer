@@ -1,15 +1,14 @@
 //
-//  ViewControllerRounds.swift
+//  TableViewCellTimer.swift
 //  Timer
 //
-//  Created by cladendas on 14.11.2020.
+//  Created by cladendas on 20.11.2020.
 //  Copyright © 2020 cladendas. All rights reserved.
 //
 
 import UIKit
 
-///Класс для настройки контроллера с параметрами для кол-ва раундов, времени раунда и отдыха
-class ViewControllerRounds: UIViewController {
+class TableViewCellTimer: UITableViewCell {
     
     @IBOutlet var numberOfRounds: UILabel!
     @IBOutlet var timeForRound: UILabel!
@@ -21,14 +20,6 @@ class ViewControllerRounds: UIViewController {
     var clouserTimeForRound: ((Double) -> Void)?
     ///Время отдыха
     var clouserTimeForRes: ((Double) -> Void)?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        clouserNumOfRounds?(1)
-        clouserTimeForRound?(5.0)
-        clouserTimeForRes?(5.0)
-    }
     
     @IBAction func stepperForNumForRoundsAction(_ sender: UIStepper) {
         let tmpValue = Int(sender.value)
@@ -47,4 +38,16 @@ class ViewControllerRounds: UIViewController {
         clouserTimeForRes?(sender.value)
         timeForRes.text = "Время отдыха: \(tmpValue)"
     }
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
+    }
+
 }

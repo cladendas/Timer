@@ -14,12 +14,12 @@ class ViewControllerRounds: UIViewController {
     @IBOutlet var numberOfRounds: UILabel!
     @IBOutlet var timeForRound: UILabel!
     @IBOutlet var timeForRes: UILabel!
+    
     @IBOutlet var tableRounds: UITableView!
     
     @IBOutlet var stepperForRound: UIStepper!
     @IBOutlet var stepperForTimeForRound: UIStepper!
     @IBOutlet var stepperForTimeRes: UIStepper!
-    
     
     ///Кол-во раундов
     var clouserNumOfRounds: ((Int) -> Void)?
@@ -30,7 +30,8 @@ class ViewControllerRounds: UIViewController {
     
     let firstRound = [1.0, 10.0, 5.0]
     
-    var rr = [[Double]]()
+    ///Хранит данные о кол-ве раундов [0], времени раунда [1], времени отдыха [2]
+    var rounds = [[Double]]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,18 +39,36 @@ class ViewControllerRounds: UIViewController {
         tableRounds.delegate = self
         tableRounds.dataSource = self
         
-        rr.append(firstRound)
+        rounds.append(firstRound)
 
         clouserNumOfRounds?(1)
         clouserTimeForRound?(5.0)
         clouserTimeForRes?(5.0)
+        
+        loadData()
+    }
+    
+    ///Сохранение в память данных с раундами
+    private func saveData() {
+        UserDefaults.standard.set(rounds, forKey: "rounds")
+        UserDefaults.standard.synchronize()
+    }
+    
+    ///Получение из памяти данных с раундами
+    private func loadData() {
+        if let data = UserDefaults.standard.object(forKey: "rounds") {
+            rounds = data as! [[Double]]
+        } else {
+            rounds = []
+        }
     }
     
     @IBAction func addRounds(_ sender: UIBarButtonItem) {
         
-        rr.append([stepperForRound.value, stepperForTimeForRound.value, stepperForTimeForRound.value])
+        rounds.append([stepperForRound.value, stepperForTimeForRound.value, stepperForTimeRes.value])
         
         tableRounds.reloadData()
+        saveData()
     }
     
     
@@ -70,27 +89,9 @@ class ViewControllerRounds: UIViewController {
         clouserTimeForRes?(sender.value)
         timeForRes.text = "Время отдыха: \(tmpValue)"
     }
-}
-
-extension ViewControllerRounds: UITableViewDelegate, UITableViewDataSource {
     
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return rr.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CellRounds", for: indexPath)
-        
-        let row = gg(round: rr[indexPath.row][0], timeForRound: rr[indexPath.row][1], timeForRes: rr[indexPath.row][2])
-        
-        cell.textLabel?.text = "\(row[1]) - \(row[2]) /\(row[0])"
-        
-        return cell
-    }
-    
-    func gg(round: Double, timeForRound: Double, timeForRes: Double) -> [String] {
+    ///Преобразует в [String] данные о кол-ве раундов, времени раунда, времени отдыха
+    func formatInfoRound(round: Double, timeForRound: Double, timeForRes: Double) -> [String] {
         
         let round = String(Int(round))
         let timeForRound = TimeFormatter.formatter(time: timeForRound)
@@ -98,6 +99,47 @@ extension ViewControllerRounds: UITableViewDelegate, UITableViewDataSource {
         
         return [round, timeForRound, timeForRes]
     }
+}
+
+extension ViewControllerRounds: UITableViewDelegate, UITableViewDataSource {
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return rounds.count
+    }
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellRounds", for: indexPath)
+        
+        let row = formatInfoRound(round: rounds[indexPath.row][0], timeForRound: rounds[indexPath.row][1], timeForRes: rounds[indexPath.row][2])
+        
+        cell.textLabel?.text = "\(row[1]) - \(row[2]) /\(row[0])"
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let ff = formatInfoRound(round: rounds[indexPath.row][0], timeForRound: rounds[indexPath.row][1], timeForRes: rounds[indexPath.row][2])
+        
+        clouserNumOfRounds?(Int(rounds[indexPath.row][0]))
+        clouserTimeForRound?(rounds[indexPath.row][1])
+        clouserTimeForRes?(rounds[indexPath.row][2])
+        
+        numberOfRounds.text = "Кол-во раундов: \(ff[0])"
+        timeForRound.text = "Время раунда: \(ff[1])"
+        timeForRes.text = "Время отдыха: \(ff[2])"
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            rounds.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            saveData()
+        }
+    }
 }

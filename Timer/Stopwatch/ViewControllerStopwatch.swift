@@ -88,6 +88,7 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
         pause.isHidden = true
         start.isHidden = false
         continueLabel.isHidden = true
+        stop.isHidden = true
         
         timer.invalidate()
         currentTime = 00.00

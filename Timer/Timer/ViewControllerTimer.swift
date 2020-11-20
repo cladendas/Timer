@@ -98,8 +98,6 @@ class ViewControllerTimer: UIViewController {
         }
     }
     
-    
-    
     @IBAction func startAction(_ sender: UIButton) {
         pause.isHidden = false
         rep.isHidden = false
@@ -115,7 +113,6 @@ class ViewControllerTimer: UIViewController {
         pause.isHidden = true
         rep.isHidden = true
         stop.isHidden = false
-        rounds.isHidden = false
         continueLabel.isHidden = false
         
         currentTimeOfRound = timeForRound
@@ -130,7 +127,6 @@ class ViewControllerTimer: UIViewController {
         rep.isHidden = false
         stop.isHidden = true
         start.isHidden = true
-        rounds.isHidden = true
         continueLabel.isHidden = true
 
         if timeForRound != tmpTimeForRound {

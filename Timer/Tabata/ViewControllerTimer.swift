@@ -48,8 +48,6 @@ class ViewControllerTimer: UIViewController {
     var currentTimeOfRound: Double = 00.00
     ///Текущее время отдыха
     var currentTimeOfRes: Double = 00.00
-
-    var vc = ViewControllerRounds()
     
     override func viewDidLoad() {
         super.viewDidLoad()

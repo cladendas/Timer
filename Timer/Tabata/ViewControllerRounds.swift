@@ -28,8 +28,6 @@ class ViewControllerRounds: UIViewController {
     ///Время отдыха
     var clouserTimeForRes: ((Double) -> Void)?
     
-    let firstRound = [1.0, 10.0, 5.0]
-    
     ///Хранит данные о кол-ве раундов [0], времени раунда [1], времени отдыха [2]
     var rounds = [[Double]]()
 
@@ -39,24 +37,11 @@ class ViewControllerRounds: UIViewController {
         tableRounds.delegate = self
         tableRounds.dataSource = self
         
-        rounds.append(firstRound)
-
         clouserNumOfRounds?(1)
         clouserTimeForRound?(5.0)
         clouserTimeForRes?(5.0)
-        
-        loadData()
-    }
-    
-    ///Сохранение в память данных с раундами
-    private func saveData() {
-        UserDefaults.standard.set(rounds, forKey: "rounds")
-        UserDefaults.standard.synchronize()
-    }
-    
-    ///Получение из памяти данных с раундами
-    private func loadData() {
-        if let data = UserDefaults.standard.object(forKey: "rounds") {
+
+        if let data = SaverLoader.load(for: "rounds") {
             rounds = data as! [[Double]]
         } else {
             rounds = []
@@ -68,7 +53,8 @@ class ViewControllerRounds: UIViewController {
         rounds.append([stepperForRound.value, stepperForTimeForRound.value, stepperForTimeRes.value])
         
         tableRounds.reloadData()
-        saveData()
+        
+        SaverLoader.save(value: rounds, for: "rounds")
     }
     
     
@@ -139,7 +125,7 @@ extension ViewControllerRounds: UITableViewDelegate, UITableViewDataSource {
         if editingStyle == .delete {
             rounds.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
-            saveData()
+            SaverLoader.save(value: rounds, for: "rounds")
         }
     }
 }

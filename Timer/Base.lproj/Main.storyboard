@@ -364,26 +364,6 @@
                                     <action selector="repAction:" destination="H03-Vy-ev5" eventType="touchUpInside" id="AHn-1j-cwV"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iwj-UZ-BLc">
-                                <rect key="frame" x="157" y="705" width="100" height="100"/>
-                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="7IS-bo-KhB"/>
-                                    <constraint firstAttribute="height" constant="100" id="uTO-qy-zHz"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                <state key="normal" title="Настройки">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="50"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <segue destination="yvf-6Z-Yjv" kind="show" identifier="Rounds" id="EnU-3b-Ti9"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BTx-EV-m7K">
                                 <rect key="frame" x="32" y="597" width="100" height="100"/>
                                 <color key="backgroundColor" red="1" green="0.61587322339999995" blue="0.33858713759999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -445,20 +425,24 @@
                             <constraint firstItem="Osl-UW-6cm" firstAttribute="top" secondItem="DsW-yE-ruV" secondAttribute="bottom" constant="1" id="mEM-JK-buc"/>
                             <constraint firstItem="h0U-BU-0bC" firstAttribute="bottom" secondItem="oTV-Ds-g6v" secondAttribute="bottom" constant="8" id="nKh-g2-i3D"/>
                             <constraint firstItem="h0U-BU-0bC" firstAttribute="trailing" secondItem="Hpj-wC-6TK" secondAttribute="trailing" constant="33" id="pCV-JC-1tM"/>
-                            <constraint firstItem="h0U-BU-0bC" firstAttribute="bottom" secondItem="iwj-UZ-BLc" secondAttribute="bottom" constant="8" id="smo-Cd-fX4"/>
                             <constraint firstItem="h0U-BU-0bC" firstAttribute="bottom" secondItem="tav-Ft-WK5" secondAttribute="bottom" constant="8" id="wTG-hZ-1gr"/>
-                            <constraint firstItem="iwj-UZ-BLc" firstAttribute="centerX" secondItem="WKz-HW-Iqz" secondAttribute="centerX" id="xaL-s1-8rU"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="h0U-BU-0bC"/>
                     </view>
-                    <navigationItem key="navigationItem" id="5bJ-4K-qZ0"/>
+                    <navigationItem key="navigationItem" id="5bJ-4K-qZ0">
+                        <barButtonItem key="rightBarButtonItem" title="Настройки" id="qsd-tv-zlv">
+                            <connections>
+                                <segue destination="yvf-6Z-Yjv" kind="show" identifier="Rounds" id="Y1m-KY-1M3"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="continueLabel" destination="Hpj-wC-6TK" id="1Nm-SN-WiT"/>
                         <outlet property="numberOfRounds" destination="bpT-m9-eQ6" id="vUy-lg-HwD"/>
                         <outlet property="numberRep" destination="BTx-EV-m7K" id="lfY-Ts-M2h"/>
+                        <outlet property="optionsBarItem" destination="qsd-tv-zlv" id="Tpb-sR-X2E"/>
                         <outlet property="pause" destination="jsv-DT-Fzd" id="VVL-c2-UPs"/>
                         <outlet property="rep" destination="tav-Ft-WK5" id="bQC-lE-a71"/>
-                        <outlet property="rounds" destination="iwj-UZ-BLc" id="Hbp-Th-8TZ"/>
                         <outlet property="start" destination="Z0f-He-gqr" id="1fO-xb-nJg"/>
                         <outlet property="stop" destination="oTV-Ds-g6v" id="sPh-5n-RgZ"/>
                         <outlet property="timeLabel" destination="DsW-yE-ruV" id="Dwa-Pw-bsw"/>
@@ -621,29 +605,12 @@
                                 <nil key="highlightedColor"/>
                                 <size key="shadowOffset" width="0.0" height="0.0"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ycl-NX-dlp">
-                                <rect key="frame" x="32" y="705" width="100" height="100"/>
-                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="JNv-o6-HSw"/>
-                                    <constraint firstAttribute="height" constant="100" id="qZB-pO-cHd"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
-                                <state key="normal" title="Стоп">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="50"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xGD-cj-1fl">
-                                <rect key="frame" x="281" y="705" width="100" height="100"/>
+                                <rect key="frame" x="308" y="705" width="100" height="100"/>
                                 <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="5Zc-Te-Nd4"/>
-                                    <constraint firstAttribute="width" constant="100" id="rhW-wY-ykP"/>
+                                    <constraint firstAttribute="height" constant="100" id="Qab-C7-Lsu"/>
+                                    <constraint firstAttribute="width" constant="100" id="yec-Bt-2m9"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <state key="normal" title="Пауза">
@@ -654,13 +621,16 @@
                                         <integer key="value" value="50"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="pauseAction:" destination="mZd-ic-WK7" eventType="touchUpInside" id="ysm-Rp-Xjk"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QBY-dt-sSL">
-                                <rect key="frame" x="281" y="705" width="100" height="100"/>
+                                <rect key="frame" x="308" y="705" width="100" height="100"/>
                                 <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="O41-FO-A9h"/>
-                                    <constraint firstAttribute="height" constant="100" id="TA0-ra-tw2"/>
+                                    <constraint firstAttribute="height" constant="100" id="e4W-w1-Pc5"/>
+                                    <constraint firstAttribute="width" constant="100" id="wp1-ii-03c"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <state key="normal" title="Старт">
@@ -671,13 +641,16 @@
                                         <integer key="value" value="50"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="startAction:" destination="mZd-ic-WK7" eventType="touchUpInside" id="lZw-h9-LFY"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5ii-0M-bzM">
-                                <rect key="frame" x="281" y="705" width="100" height="100"/>
+                                <rect key="frame" x="308" y="705" width="100" height="100"/>
                                 <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="SYA-9g-gyv"/>
-                                    <constraint firstAttribute="height" constant="100" id="nQz-Hh-ijj"/>
+                                    <constraint firstAttribute="width" constant="100" id="d3V-Rv-RO4"/>
+                                    <constraint firstAttribute="height" constant="100" id="jai-0C-SDX"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <state key="normal" title="Дальше">
@@ -688,13 +661,16 @@
                                         <integer key="value" value="50"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="continueAction:" destination="mZd-ic-WK7" eventType="touchUpInside" id="kk1-A3-l6l"/>
+                                </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ySp-sD-CCo">
-                                <rect key="frame" x="32" y="705" width="100" height="100"/>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ySp-sD-CCo">
+                                <rect key="frame" x="308" y="315" width="100" height="100"/>
                                 <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="ccw-U2-HSF"/>
-                                    <constraint firstAttribute="height" constant="100" id="zrY-qm-yPH"/>
+                                    <constraint firstAttribute="height" constant="100" id="8qE-02-pSC"/>
+                                    <constraint firstAttribute="width" constant="100" id="mkE-2D-YXX"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <state key="normal" title="Повтор">
@@ -705,36 +681,19 @@
                                         <integer key="value" value="50"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8qI-sm-nZj">
-                                <rect key="frame" x="157" y="705" width="100" height="100"/>
-                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="CU6-rr-13d"/>
-                                    <constraint firstAttribute="width" constant="100" id="fde-0u-bjr"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                <state key="normal" title="Настройки">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="50"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <segue destination="wTd-Pp-6gV" kind="show" identifier="OptionsTimer" id="VJ8-vn-a0W"/>
+                                    <action selector="repAction:" destination="mZd-ic-WK7" eventType="touchUpInside" id="s2E-3T-PpD"/>
                                 </connections>
                             </button>
                             <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lzG-f7-Aio">
-                                <rect key="frame" x="32" y="597" width="100" height="100"/>
+                                <rect key="frame" x="308" y="184" width="100" height="100"/>
                                 <color key="backgroundColor" red="1" green="0.61587322339999995" blue="0.33858713759999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
                                 </accessibility>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="0El-ET-fS6"/>
-                                    <constraint firstAttribute="height" constant="100" id="e3a-z1-hrY"/>
+                                    <constraint firstAttribute="width" constant="100" id="4MA-TK-hDL"/>
+                                    <constraint firstAttribute="height" constant="100" id="gqu-fE-pA7"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="48"/>
                                 <nil key="textColor"/>
@@ -747,17 +706,18 @@
                                 </userDefinedRuntimeAttributes>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Tq3-KG-m9e">
-                                <rect key="frame" x="0.0" y="184" width="414" height="405"/>
+                                <rect key="frame" x="0.0" y="184" width="300" height="629"/>
+                                <color key="sectionIndexColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CellTrain" textLabel="du1-9X-xUd" style="IBUITableViewCellStyleDefault" id="CCE-on-OmV">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                        <rect key="frame" x="0.0" y="28" width="300" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="CCE-on-OmV" id="OUo-L3-R11">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="300" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="00:05:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="du1-9X-xUd">
-                                                    <rect key="frame" x="20" y="0.0" width="374" height="43.5"/>
+                                                    <rect key="frame" x="16" y="0.0" width="268" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -765,40 +725,72 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" red="1" green="0.61587322339999995" blue="0.33858713759999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ycl-NX-dlp">
+                                <rect key="frame" x="308" y="575" width="100" height="100"/>
+                                <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="1xk-GM-fcy"/>
+                                    <constraint firstAttribute="height" constant="100" id="qWQ-fL-2fu"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                <state key="normal" title="Стоп">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="stopAction:" destination="mZd-ic-WK7" eventType="touchUpInside" id="CNY-UM-Mff"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                         <constraints>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="bottom" secondItem="ySp-sD-CCo" secondAttribute="bottom" constant="8" id="24b-0d-waC"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="bottom" secondItem="5ii-0M-bzM" secondAttribute="bottom" constant="8" id="6Eh-j0-Zic"/>
-                            <constraint firstItem="lzG-f7-Aio" firstAttribute="top" secondItem="Tq3-KG-m9e" secondAttribute="bottom" constant="8" id="7zM-ss-NYi"/>
-                            <constraint firstItem="lzG-f7-Aio" firstAttribute="leading" secondItem="8AL-X6-YoT" secondAttribute="leading" constant="32" id="Fjn-Ey-c3i"/>
-                            <constraint firstItem="ySp-sD-CCo" firstAttribute="leading" secondItem="8AL-X6-YoT" secondAttribute="leading" constant="32" id="JB2-hF-fhq"/>
-                            <constraint firstItem="Tq3-KG-m9e" firstAttribute="top" secondItem="c0t-Xc-fw3" secondAttribute="bottom" constant="8" id="MpG-ZK-i5r"/>
+                            <constraint firstItem="xGD-cj-1fl" firstAttribute="top" relation="lessThanOrEqual" secondItem="ycl-NX-dlp" secondAttribute="bottom" constant="30" id="1Zg-8x-vxJ"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="QBY-dt-sSL" secondAttribute="trailing" constant="6" id="2HJ-ji-BJ6"/>
+                            <constraint firstItem="ySp-sD-CCo" firstAttribute="top" relation="lessThanOrEqual" secondItem="lzG-f7-Aio" secondAttribute="bottom" constant="31" id="7j3-cs-TS7"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="lzG-f7-Aio" secondAttribute="trailing" constant="6" id="A3S-id-Nrl"/>
+                            <constraint firstItem="5ii-0M-bzM" firstAttribute="top" relation="lessThanOrEqual" secondItem="ycl-NX-dlp" secondAttribute="bottom" constant="30" id="ER6-0u-v8F"/>
+                            <constraint firstItem="5ii-0M-bzM" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="H1e-yk-YVS"/>
+                            <constraint firstItem="Tq3-KG-m9e" firstAttribute="leading" secondItem="8AL-X6-YoT" secondAttribute="leading" id="IIj-I9-4bB"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="bottom" secondItem="xGD-cj-1fl" secondAttribute="bottom" constant="8" id="KJW-Cm-YDT"/>
+                            <constraint firstItem="lzG-f7-Aio" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="OoH-l2-mqi"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="ySp-sD-CCo" secondAttribute="trailing" constant="6" id="Pnw-5k-PLy"/>
                             <constraint firstItem="c0t-Xc-fw3" firstAttribute="centerX" secondItem="2CS-vu-CNp" secondAttribute="centerX" id="QTB-cC-DpP"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="QBY-dt-sSL" secondAttribute="trailing" constant="33" id="T9C-Ha-x0V"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="bottom" secondItem="8qI-sm-nZj" secondAttribute="bottom" constant="8" id="TFS-gT-EVb"/>
-                            <constraint firstItem="ycl-NX-dlp" firstAttribute="leading" secondItem="8AL-X6-YoT" secondAttribute="leading" constant="32" id="V3h-Yj-P9R"/>
-                            <constraint firstItem="8qI-sm-nZj" firstAttribute="centerX" secondItem="2CS-vu-CNp" secondAttribute="centerX" id="Wcq-XO-Y66"/>
-                            <constraint firstItem="ycl-NX-dlp" firstAttribute="top" secondItem="lzG-f7-Aio" secondAttribute="bottom" constant="8" id="ayb-gX-KDG"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="bottom" secondItem="xGD-cj-1fl" secondAttribute="bottom" constant="8" id="bxX-um-U7C"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="bottom" secondItem="ycl-NX-dlp" secondAttribute="bottom" constant="8" id="elR-td-Gxx"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="bottom" secondItem="QBY-dt-sSL" secondAttribute="bottom" constant="8" id="fZS-rx-snY"/>
-                            <constraint firstItem="Tq3-KG-m9e" firstAttribute="leading" secondItem="8AL-X6-YoT" secondAttribute="leading" id="pmB-qO-j5T"/>
-                            <constraint firstItem="Tq3-KG-m9e" firstAttribute="trailing" secondItem="8AL-X6-YoT" secondAttribute="trailing" id="rgb-V1-qey"/>
+                            <constraint firstItem="Tq3-KG-m9e" firstAttribute="bottom" secondItem="8AL-X6-YoT" secondAttribute="bottom" id="TJv-gc-DAi"/>
+                            <constraint firstItem="lzG-f7-Aio" firstAttribute="top" secondItem="c0t-Xc-fw3" secondAttribute="bottom" constant="8" id="UdU-Ru-h1N"/>
+                            <constraint firstItem="QBY-dt-sSL" firstAttribute="top" relation="lessThanOrEqual" secondItem="ycl-NX-dlp" secondAttribute="bottom" constant="30" id="Wi1-Ku-sbr"/>
+                            <constraint firstItem="QBY-dt-sSL" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="aF0-Y5-WXN"/>
+                            <constraint firstItem="ycl-NX-dlp" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="bzX-rl-uOi"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="ycl-NX-dlp" secondAttribute="trailing" constant="6" id="cix-a7-qNg"/>
+                            <constraint firstItem="xGD-cj-1fl" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="gbC-cs-SFJ"/>
+                            <constraint firstItem="Tq3-KG-m9e" firstAttribute="top" secondItem="c0t-Xc-fw3" secondAttribute="bottom" constant="8" id="h4t-op-8bM"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="5ii-0M-bzM" secondAttribute="trailing" constant="6" id="pri-he-60L"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="bottom" secondItem="QBY-dt-sSL" secondAttribute="bottom" constant="8" id="r8i-Cg-cpO"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="bottom" secondItem="5ii-0M-bzM" secondAttribute="bottom" constant="8" id="s74-O9-Dwk"/>
+                            <constraint firstItem="ySp-sD-CCo" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="tWw-qH-RcE"/>
                             <constraint firstItem="c0t-Xc-fw3" firstAttribute="top" secondItem="8AL-X6-YoT" secondAttribute="top" constant="20" id="uRh-Sr-AC6"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="5ii-0M-bzM" secondAttribute="trailing" constant="33" id="vBg-rb-Ufe"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="xGD-cj-1fl" secondAttribute="trailing" constant="33" id="wjY-rF-T3S"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="xGD-cj-1fl" secondAttribute="trailing" constant="6" id="zcH-dX-9WJ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="8AL-X6-YoT"/>
                     </view>
-                    <navigationItem key="navigationItem" id="61Z-KW-ysS"/>
+                    <navigationItem key="navigationItem" id="61Z-KW-ysS">
+                        <barButtonItem key="rightBarButtonItem" title="Настройки" id="rTl-CR-fTs">
+                            <connections>
+                                <segue destination="wTd-Pp-6gV" kind="show" identifier="OptionsTimer" id="GQi-HA-pGv"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="continueLabel" destination="5ii-0M-bzM" id="bJj-m3-4jq"/>
                         <outlet property="numberOfRep" destination="lzG-f7-Aio" id="d6N-Fo-bTC"/>
-                        <outlet property="options" destination="8qI-sm-nZj" id="eFj-AL-7cj"/>
+                        <outlet property="optionsBarItem" destination="rTl-CR-fTs" id="BrO-nB-Y0f"/>
                         <outlet property="pause" destination="xGD-cj-1fl" id="ppI-Dp-h9v"/>
                         <outlet property="rep" destination="ySp-sD-CCo" id="2zS-oP-yWb"/>
                         <outlet property="start" destination="QBY-dt-sSL" id="FsE-bS-y1q"/>
@@ -843,10 +835,10 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CellOptions" id="rLZ-8d-nTp" customClass="CellOptionsTrain" customModule="Timer" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="44"/>
+                                        <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rLZ-8d-nTp" id="XKe-Ii-d65">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Интервал 00:05:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Cxf-jR-rhE">
@@ -856,20 +848,15 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minimumValue="5" maximumValue="5980" stepValue="5" translatesAutoresizingMaskIntoConstraints="NO" id="LSV-LM-PD9">
-                                                    <rect key="frame" x="300" y="5" width="94" height="32.5"/>
+                                                <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minimumValue="5" maximumValue="5980" stepValue="5" translatesAutoresizingMaskIntoConstraints="NO" id="LSV-LM-PD9">
+                                                    <rect key="frame" x="300" y="6" width="94" height="32"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                     <connections>
                                                         <action selector="stepperForTimeForRoundsAction:" destination="yvf-6Z-Yjv" eventType="valueChanged" id="fj3-A7-l4w"/>
                                                         <action selector="stepperTimeAction:" destination="rLZ-8d-nTp" eventType="valueChanged" id="9T3-NR-kHV"/>
                                                     </connections>
                                                 </stepper>
                                             </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="LSV-LM-PD9" secondAttribute="bottom" constant="6.5" id="3oW-CB-FRu"/>
-                                                <constraint firstAttribute="trailing" secondItem="LSV-LM-PD9" secondAttribute="trailing" constant="20" id="5Bb-bW-nbF"/>
-                                                <constraint firstItem="LSV-LM-PD9" firstAttribute="top" secondItem="XKe-Ii-d65" secondAttribute="top" constant="5" id="8Jl-HU-wUa"/>
-                                                <constraint firstItem="LSV-LM-PD9" firstAttribute="leading" relation="lessThanOrEqual" secondItem="Cxf-jR-rhE" secondAttribute="trailing" constant="102" id="bvw-bD-m6Y"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="stepperTime" destination="LSV-LM-PD9" id="KCU-wG-uHv"/>
@@ -915,6 +902,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="numberOfRounds" destination="Nda-09-c0O" id="ze3-tH-edS"/>
+                        <outlet property="stepperNumOfRounds" destination="ueT-nR-gXm" id="dtN-8Z-Yc9"/>
                         <outlet property="tableOfTrain" destination="Xez-zL-kKf" id="UZs-5h-j4p"/>
                     </connections>
                 </viewController>

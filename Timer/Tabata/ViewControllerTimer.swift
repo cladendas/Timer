@@ -11,6 +11,7 @@ import UIKit
 ///Класс таймера
 class ViewControllerTimer: UIViewController {
     
+    @IBOutlet var optionsBarItem: UIBarButtonItem!
     @IBOutlet var timeLabel: UILabel!
     @IBOutlet var timeLabelForRes: UILabel!
     @IBOutlet var numberRep: UILabel!
@@ -20,7 +21,6 @@ class ViewControllerTimer: UIViewController {
     @IBOutlet var pause: UIButton!
     @IBOutlet var stop: UIButton!
     @IBOutlet var rep: UIButton!
-    @IBOutlet var rounds: UIButton!
 
     @IBOutlet var continueLabel: UIButton!
     
@@ -101,8 +101,8 @@ class ViewControllerTimer: UIViewController {
         rep.isHidden = false
         start.isHidden = true
         stop.isHidden = true
-        rounds.isHidden = true
         numberRep.isHidden = false
+        optionsBarItem.isEnabled = false
         
         timerForRound = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRound), userInfo: nil, repeats: true)
     }
@@ -151,10 +151,10 @@ class ViewControllerTimer: UIViewController {
         pause.isHidden = true
         stop.isHidden = true
         start.isHidden = false
-        rounds.isHidden = false
         numberRep.isHidden = true
         rep.isHidden = true
         continueLabel.isHidden = true
+        optionsBarItem.isEnabled = true
         
         timeForRound = tmpTimeForRound
         timeForRes = tmpTimeForRes

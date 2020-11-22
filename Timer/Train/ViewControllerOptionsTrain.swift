@@ -12,12 +12,14 @@ class ViewControllerOptionsTrain: UIViewController {
     
     @IBOutlet var tableOfTrain: UITableView!
     @IBOutlet var numberOfRounds: UILabel!
+    @IBOutlet var stepperNumOfRounds: UIStepper!
     
     var rounds = [Double]()
-    var countOfRounds = 1
+    var numOfRounds = 4
     var stepperRoundValue = 5.0
     
     var clouserRounds: (([Double]) -> Void)?
+    var clouserNumOfRounds: ((Int) -> Void)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,13 +27,16 @@ class ViewControllerOptionsTrain: UIViewController {
         self.tableOfTrain.delegate = self
         self.tableOfTrain.dataSource = self
 
-        clouserRounds?(rounds)
+        
+        clouserNumOfRounds?(Int(stepperNumOfRounds.value))
         
         if let data = SaverLoader.load(for: "train") {
             rounds = data as! [Double]
         } else {
             rounds = []
         }
+        
+        clouserRounds?(rounds)
     }
     
     @IBAction func addTimeAction(_ sender: Any) {
@@ -44,6 +49,7 @@ class ViewControllerOptionsTrain: UIViewController {
         let tmpValue = Int(sender.value)
 //        clouserNumOfRounds?(tmpValue)
         numberOfRounds.text = "Кол-во раундов: \(tmpValue)"
+        clouserNumOfRounds?(tmpValue)
     }
 
     /*
@@ -67,10 +73,6 @@ extension ViewControllerOptionsTrain: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellOptions", for: indexPath) as! CellOptionsTrain
         
-        let tmpInterval = TimeFormatter.formatter(time: rounds[indexPath.row])
-        
-        cell.initCell(time: "Интервал \(tmpInterval)")
-        
         return cell
     } 
     
@@ -82,7 +84,7 @@ extension ViewControllerOptionsTrain: UITableViewDelegate, UITableViewDataSource
         if editingStyle == .delete {
             rounds.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
-//            saveData()
+            SaverLoader.save(value: rounds, for: "train")
         }
     }
 }

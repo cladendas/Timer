@@ -15,11 +15,6 @@ class CellOptionsTrain: UITableViewCell {
     
     var clouserStepperTime: ((Double) -> Void)?
     
-    func initCell(time: String) {
-//        clouserStepperTime?(13.0)
-        self.time.text = time
-    }
-    
     @IBAction func stepperTimeAction(_ sender: UIStepper) {
         let tmpValue = TimeFormatter.formatter(time: sender.value)
 //        clouserNumOfRounds?(tmpValue)
@@ -28,7 +23,7 @@ class CellOptionsTrain: UITableViewCell {
     
 //    override func awakeFromNib() {
 //        super.awakeFromNib()
-//        // Initialization code
+//        
 //    }
     
     

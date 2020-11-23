@@ -11,7 +11,7 @@ import UIKit
 class ViewControllerTrain: UIViewController {
     
     @IBOutlet var optionsBarItem: UIBarButtonItem!
-    @IBOutlet var timer: UILabel!
+    @IBOutlet var time: UILabel!
     @IBOutlet var numberOfRep: UILabel!
     
     @IBOutlet var stop: UIButton!
@@ -22,17 +22,27 @@ class ViewControllerTrain: UIViewController {
     
     @IBOutlet var tableOfTrain: UITableView!
     
-    var roundsTrain: [Double] = [2.0, 24.0]
-    var vcOptionTrain = ViewControllerOptionsTrain()
+    var roundsTrain: [Double] = [2.0, 24.0, 13]
+    
+    ///Интервалы
+    var roundsTrainQ = [[Double]]()
+    var roundsQ = [[3.0], [4.0, 5.0, 6.0]]
+    
+    var tmpRoundsTrain: [Double] = []
     
     var numOfRounds = 0
+    var countNumOfTrains = 0
     var countRep = 0
     
     var timerForTrain = Timer()
     ///Время для таймера раунда (максимум 5999.99)
-    private var timeForRound: Double = 1.0
+    private var timeForRound: Double = 10.0
     ///Переменная для хранения начального значения времени таймера раунда (максимум 5999.99)
     private var tmpTimeForRound: Double = 0.0
+    ///Переменная для фиксации значения текущего времени
+    var tmpTime: Double = 00.00
+    ///Текущее время раунда
+    var currentTimeOfRound: Double = 00.00
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,19 +55,33 @@ class ViewControllerTrain: UIViewController {
         
         tableOfTrain.delegate = self
         tableOfTrain.dataSource = self
-
+        
+        timeForRound = roundsQ[0][0]
+        tmpTimeForRound = timeForRound
+        tmpRoundsTrain = roundsTrain
+        countNumOfTrains = roundsTrain.count
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-           if case let controller as ViewControllerOptionsTrain = segue.destination, segue.identifier == "OptionsTimer" {
-                controller.clouserNumOfRounds = { [unowned self] num in
-                    self.numOfRounds = num
-                    self.tableOfTrain.reloadData()
-                }
-                controller.clouserRounds = { [unowned self] rounds in
-                    self.roundsTrain = rounds
-                }
+       if case let controller as ViewControllerOptionsTrain = segue.destination, segue.identifier == "OptionsTimer" {
+//            controller.clouserNumOfRounds = { [unowned self] num in
+//                self.numOfRounds = num
+//                self.tableOfTrain.reloadData()
+//            }
+//            controller.clouserRounds = { [unowned self] rounds in
+//                self.roundsTrain = rounds
+//                self.timeForRound = self.roundsTrain[0]
+//                self.time.text = TimeFormatter.formatter(time: self.roundsTrain[0])
+//                self.tableOfTrain.reloadData()
+//            }
+            controller.clouserRoundsQ = { [unowned self] item in
+                self.numOfRounds = Int(item[0][0])
+                self.roundsQ = item
+//                self.roundsTrainQ = Array(repeating: item[1], count: Int(item[0][0]))
+                self.time.text = TimeFormatter.formatter(time: self.roundsTrainQ[1][0])
+                self.tableOfTrain.reloadData()
             }
+        }
     }
     
     @IBAction func startAction(_ sender: UIButton) {
@@ -68,7 +92,7 @@ class ViewControllerTrain: UIViewController {
         numberOfRep.isHidden = false
         optionsBarItem.isEnabled = false
         
-        timerForTrain = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRound), userInfo: nil, repeats: true)
+        timerForTrain = timer()
     }
     
     @IBAction func pauseAction(_ sender: UIButton) {
@@ -77,11 +101,9 @@ class ViewControllerTrain: UIViewController {
         stop.isHidden = false
         continueLabel.isHidden = false
         
-//        currentTimeOfRound = timeForRound
-//        currentTimeOfRes = timeForRes
-//        
-//        timerForRound.invalidate()
-//        timerForRes.invalidate()
+        currentTimeOfRound = timeForRound
+        
+        timerForTrain.invalidate()
     }
     
     @IBAction func continueAction(_ sender: UIButton) {
@@ -90,42 +112,29 @@ class ViewControllerTrain: UIViewController {
         stop.isHidden = true
         start.isHidden = true
         continueLabel.isHidden = true
+        
+        if timeForRound != tmpTimeForRound {
+            timeForRound = currentTimeOfRound
 
-//        if timeForRound != tmpTimeForRound {
-//            timeForRound = currentTimeOfRound
-//
-//            timerForRound = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRound), userInfo: nil, repeats: true)
-//
-//            currentTimeOfRound = 00.00
-//        }
-//
-//        if timeForRes != tmpTimeForRes {
-//            timeForRes = currentTimeOfRes
-//
-//            timerForRes = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRes), userInfo: nil, repeats: true)
-//
-//            currentTimeOfRes = 00.00
-//        }
+            timerForTrain = timer()
+
+            currentTimeOfRound = 00.00
+        }
     }
     
     @IBAction func stopAction(_ sender: UIButton) {
-//        timerForRound.invalidate()
-//        timerForRes.invalidate()
+        timerForTrain.invalidate()
         
         pause.isHidden = true
         stop.isHidden = true
         start.isHidden = false
-        rep.isHidden = true
+        numberOfRep.isHidden = true
         rep.isHidden = true
         continueLabel.isHidden = true
         optionsBarItem.isEnabled = true
         
-//        timeForRound = tmpTimeForRound
-//        timeForRes = tmpTimeForRes
-//        countOfRounds = tmpCountOfRounds
-//        timeLabel.text = TimeFormatter.formatter(time: timeForRound)
-//        timeLabelForRes.text = TimeFormatter.formatter(time: timeForRes)
-//        numberOfRounds.text = "Раундов \(countOfRounds)/\(countOfRounds)"
+        timeForRound = tmpTimeForRound
+        time.text = TimeFormatter.formatter(time: timeForRound)
     }
     
     ///Подсчёт повторений. Здесь погрешность в том, если будут выполняться какие-то быстрые двжения, требующие подсчёта (прыжки на скакалке, выбросы грифа, полуприседы). Обработка нажатия на кнопку не успевает. Подсчёт работает и во время отдыха
@@ -149,41 +158,67 @@ class ViewControllerTrain: UIViewController {
     @objc
     private func timerUpdateForRound() {
         timeForRound -= 00.01
-//        if timeForRound <= 0.0 && countOfRounds > 0 {
-//            timerForRound.invalidate()
-//            //чтобы таймер стратовал с заданного значения
-//            timeForRound = tmpTimeForRound
-//            countOfRounds -= 1
-//            
-//            numberOfRounds.text = "Раундов \(countOfRounds)/\(tmpCountOfRounds)"
-//            
-//            startRes()
-//        } else {
-//            timer.text = TimeFormatter.formatter(time: timeForRound)
-//        }
-    }
+        if timeForRound <= 0.0 {
+            timerForTrain.invalidate()
+            
+            //чтобы таймер стартовал с заданного значения
+            if roundsTrain.count > 1 {
+                timeForRound = roundsQ[0][1]
+                
+                let ip = IndexPath(row: 0, section: 0)
+                roundsQ[0].remove(at: 0)
+                tableOfTrain.deleteRows(at: [ip], with: .fade)
 
+                tableOfTrain.reloadData()
+                
+                timerForTrain = timer()
+            } else if roundsTrain.count == 1 {
+                if let first = roundsTrain.first {
+                    timeForRound = first
+                }
+//                roundsTrain.removeFirst()
+                
+//                let ip = IndexPath(row: 0, section: 0)
+//                tableOfTrain.deleteRows(at: [ip], with: .fade)
+                
+                tableOfTrain.reloadData()
+                
+                timerForTrain = timer()
+            }
+
+        } else if roundsTrain.count == 0  {
+            timerForTrain.invalidate()
+            roundsTrain = tmpRoundsTrain
+            tableOfTrain.reloadData()
+            time.text = TimeFormatter.formatter(time: timeForRound)
+        } else {
+            time.text = TimeFormatter.formatter(time: timeForRound)
+        }
+    }
+    
+    ///Для создания таймера для отсчёта времени
+    private func timer() -> Timer {
+        Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRound), userInfo: nil, repeats: true)
+    }
 }
 
 extension ViewControllerTrain: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        
-        return numOfRounds
+        return roundsTrainQ.count
     }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return roundsTrain.count
+        return roundsTrainQ[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellTrain", for: indexPath)
         
-        let time = TimeFormatter.formatter(time: roundsTrain[indexPath.row])
+        let time = TimeFormatter.formatter(time: roundsTrainQ[indexPath.section][indexPath.row])
         
         cell.textLabel?.text = time
-
         return cell
     }
     

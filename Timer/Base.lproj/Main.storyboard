@@ -609,8 +609,8 @@
                                 <rect key="frame" x="308" y="705" width="100" height="100"/>
                                 <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="Qab-C7-Lsu"/>
-                                    <constraint firstAttribute="width" constant="100" id="yec-Bt-2m9"/>
+                                    <constraint firstAttribute="height" constant="100" id="Dkn-Gj-EXD"/>
+                                    <constraint firstAttribute="width" constant="100" id="KZQ-Lv-3if"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <state key="normal" title="Пауза">
@@ -629,8 +629,8 @@
                                 <rect key="frame" x="308" y="705" width="100" height="100"/>
                                 <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="e4W-w1-Pc5"/>
-                                    <constraint firstAttribute="width" constant="100" id="wp1-ii-03c"/>
+                                    <constraint firstAttribute="width" constant="100" id="03U-Km-k23"/>
+                                    <constraint firstAttribute="height" constant="100" id="E4G-lF-yN5"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <state key="normal" title="Старт">
@@ -649,8 +649,8 @@
                                 <rect key="frame" x="308" y="705" width="100" height="100"/>
                                 <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="d3V-Rv-RO4"/>
-                                    <constraint firstAttribute="height" constant="100" id="jai-0C-SDX"/>
+                                    <constraint firstAttribute="width" constant="100" id="eRL-ZF-qLY"/>
+                                    <constraint firstAttribute="height" constant="100" id="i7D-Yc-QEN"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <state key="normal" title="Дальше">
@@ -665,12 +665,12 @@
                                     <action selector="continueAction:" destination="mZd-ic-WK7" eventType="touchUpInside" id="kk1-A3-l6l"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ySp-sD-CCo">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ySp-sD-CCo">
                                 <rect key="frame" x="308" y="315" width="100" height="100"/>
                                 <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="8qE-02-pSC"/>
-                                    <constraint firstAttribute="width" constant="100" id="mkE-2D-YXX"/>
+                                    <constraint firstAttribute="width" constant="100" id="0lK-Hw-TJK"/>
+                                    <constraint firstAttribute="height" constant="100" id="j94-eD-PRE"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <state key="normal" title="Повтор">
@@ -692,8 +692,8 @@
                                     <accessibilityTraits key="traits" staticText="YES" notEnabled="YES"/>
                                 </accessibility>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="4MA-TK-hDL"/>
-                                    <constraint firstAttribute="height" constant="100" id="gqu-fE-pA7"/>
+                                    <constraint firstAttribute="height" constant="100" id="FH9-sG-ZpQ"/>
+                                    <constraint firstAttribute="width" constant="100" id="NkM-MC-dyB"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="48"/>
                                 <nil key="textColor"/>
@@ -728,13 +728,18 @@
                                         <color key="backgroundColor" red="1" green="0.61587322339999995" blue="0.33858713759999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </tableViewCell>
                                 </prototypes>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="15"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ycl-NX-dlp">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ycl-NX-dlp">
                                 <rect key="frame" x="308" y="575" width="100" height="100"/>
                                 <color key="backgroundColor" systemColor="systemOrangeColor" red="1" green="0.58431372550000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="1xk-GM-fcy"/>
-                                    <constraint firstAttribute="height" constant="100" id="qWQ-fL-2fu"/>
+                                    <constraint firstAttribute="height" constant="100" id="qN5-Jq-NRD"/>
+                                    <constraint firstAttribute="width" constant="100" id="xs3-j0-hlX"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <state key="normal" title="Стоп">
@@ -752,31 +757,30 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                         <constraints>
-                            <constraint firstItem="xGD-cj-1fl" firstAttribute="top" relation="lessThanOrEqual" secondItem="ycl-NX-dlp" secondAttribute="bottom" constant="30" id="1Zg-8x-vxJ"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="QBY-dt-sSL" secondAttribute="trailing" constant="6" id="2HJ-ji-BJ6"/>
-                            <constraint firstItem="ySp-sD-CCo" firstAttribute="top" relation="lessThanOrEqual" secondItem="lzG-f7-Aio" secondAttribute="bottom" constant="31" id="7j3-cs-TS7"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="lzG-f7-Aio" secondAttribute="trailing" constant="6" id="A3S-id-Nrl"/>
-                            <constraint firstItem="5ii-0M-bzM" firstAttribute="top" relation="lessThanOrEqual" secondItem="ycl-NX-dlp" secondAttribute="bottom" constant="30" id="ER6-0u-v8F"/>
-                            <constraint firstItem="5ii-0M-bzM" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="H1e-yk-YVS"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="bottom" secondItem="5ii-0M-bzM" secondAttribute="bottom" constant="8" id="3Cz-fe-68d"/>
+                            <constraint firstItem="ySp-sD-CCo" firstAttribute="top" secondItem="lzG-f7-Aio" secondAttribute="bottom" constant="31" id="45u-H1-Kjr"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="lzG-f7-Aio" secondAttribute="trailing" constant="6" id="6hy-wl-HaD"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="5ii-0M-bzM" secondAttribute="trailing" constant="6" id="7mc-y2-ovo"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="bottom" secondItem="xGD-cj-1fl" secondAttribute="bottom" constant="8" id="E85-NT-fRR"/>
                             <constraint firstItem="Tq3-KG-m9e" firstAttribute="leading" secondItem="8AL-X6-YoT" secondAttribute="leading" id="IIj-I9-4bB"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="bottom" secondItem="xGD-cj-1fl" secondAttribute="bottom" constant="8" id="KJW-Cm-YDT"/>
-                            <constraint firstItem="lzG-f7-Aio" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="OoH-l2-mqi"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="ySp-sD-CCo" secondAttribute="trailing" constant="6" id="Pnw-5k-PLy"/>
+                            <constraint firstItem="5ii-0M-bzM" firstAttribute="top" secondItem="ycl-NX-dlp" secondAttribute="bottom" constant="30" id="Klu-0b-ZCl"/>
+                            <constraint firstItem="xGD-cj-1fl" firstAttribute="top" secondItem="ycl-NX-dlp" secondAttribute="bottom" constant="30" id="LhE-7d-MSu"/>
                             <constraint firstItem="c0t-Xc-fw3" firstAttribute="centerX" secondItem="2CS-vu-CNp" secondAttribute="centerX" id="QTB-cC-DpP"/>
                             <constraint firstItem="Tq3-KG-m9e" firstAttribute="bottom" secondItem="8AL-X6-YoT" secondAttribute="bottom" id="TJv-gc-DAi"/>
-                            <constraint firstItem="lzG-f7-Aio" firstAttribute="top" secondItem="c0t-Xc-fw3" secondAttribute="bottom" constant="8" id="UdU-Ru-h1N"/>
-                            <constraint firstItem="QBY-dt-sSL" firstAttribute="top" relation="lessThanOrEqual" secondItem="ycl-NX-dlp" secondAttribute="bottom" constant="30" id="Wi1-Ku-sbr"/>
-                            <constraint firstItem="QBY-dt-sSL" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="aF0-Y5-WXN"/>
-                            <constraint firstItem="ycl-NX-dlp" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="bzX-rl-uOi"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="ycl-NX-dlp" secondAttribute="trailing" constant="6" id="cix-a7-qNg"/>
-                            <constraint firstItem="xGD-cj-1fl" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="gbC-cs-SFJ"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="ySp-sD-CCo" secondAttribute="trailing" constant="6" id="VjV-fK-wQf"/>
+                            <constraint firstItem="lzG-f7-Aio" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="Vlj-TQ-GWN"/>
+                            <constraint firstItem="5ii-0M-bzM" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="Wlf-gl-HdI"/>
+                            <constraint firstItem="ySp-sD-CCo" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="Yal-8E-UNP"/>
+                            <constraint firstItem="lzG-f7-Aio" firstAttribute="top" secondItem="c0t-Xc-fw3" secondAttribute="bottom" constant="8" id="gt6-9u-zXn"/>
+                            <constraint firstItem="xGD-cj-1fl" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="gxb-2G-tV3"/>
                             <constraint firstItem="Tq3-KG-m9e" firstAttribute="top" secondItem="c0t-Xc-fw3" secondAttribute="bottom" constant="8" id="h4t-op-8bM"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="5ii-0M-bzM" secondAttribute="trailing" constant="6" id="pri-he-60L"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="bottom" secondItem="QBY-dt-sSL" secondAttribute="bottom" constant="8" id="r8i-Cg-cpO"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="bottom" secondItem="5ii-0M-bzM" secondAttribute="bottom" constant="8" id="s74-O9-Dwk"/>
-                            <constraint firstItem="ySp-sD-CCo" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="tWw-qH-RcE"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="xGD-cj-1fl" secondAttribute="trailing" constant="6" id="jEz-go-aeb"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="QBY-dt-sSL" secondAttribute="trailing" constant="6" id="kjv-3e-b6P"/>
+                            <constraint firstItem="QBY-dt-sSL" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="mKY-7c-vsy"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="bottom" secondItem="QBY-dt-sSL" secondAttribute="bottom" constant="8" id="mfS-LW-G3F"/>
+                            <constraint firstItem="ycl-NX-dlp" firstAttribute="leading" secondItem="Tq3-KG-m9e" secondAttribute="trailing" constant="8" id="qwd-TL-BOt"/>
+                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="ycl-NX-dlp" secondAttribute="trailing" constant="6" id="s68-b5-r0k"/>
                             <constraint firstItem="c0t-Xc-fw3" firstAttribute="top" secondItem="8AL-X6-YoT" secondAttribute="top" constant="20" id="uRh-Sr-AC6"/>
-                            <constraint firstItem="8AL-X6-YoT" firstAttribute="trailing" secondItem="xGD-cj-1fl" secondAttribute="trailing" constant="6" id="zcH-dX-9WJ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="8AL-X6-YoT"/>
                     </view>
@@ -796,7 +800,7 @@
                         <outlet property="start" destination="QBY-dt-sSL" id="FsE-bS-y1q"/>
                         <outlet property="stop" destination="ycl-NX-dlp" id="ZHS-Jh-Sa1"/>
                         <outlet property="tableOfTrain" destination="Tq3-KG-m9e" id="QLf-ox-pkc"/>
-                        <outlet property="timer" destination="c0t-Xc-fw3" id="1uu-bz-K5n"/>
+                        <outlet property="time" destination="c0t-Xc-fw3" id="WOL-AK-Cu6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fr3-5U-FJh" sceneMemberID="firstResponder"/>

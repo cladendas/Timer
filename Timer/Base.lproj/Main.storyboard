@@ -838,31 +838,58 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="613.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CellOptions" id="rLZ-8d-nTp" customClass="CellOptionsTrain" customModule="Timer" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CellOptions" rowHeight="76" id="rLZ-8d-nTp" customClass="CellOptionsTrain" customModule="Timer" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="76"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rLZ-8d-nTp" id="XKe-Ii-d65">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="76"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Интервал 00:05:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Cxf-jR-rhE">
-                                                    <rect key="frame" x="20" y="11" width="178" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Интервал 00:05:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cxf-jR-rhE">
+                                                    <rect key="frame" x="20" y="11" width="153" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="5" minimumValue="5" maximumValue="5980" stepValue="5" translatesAutoresizingMaskIntoConstraints="NO" id="LSV-LM-PD9">
-                                                    <rect key="frame" x="300" y="6" width="94" height="32"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                                <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="5980" translatesAutoresizingMaskIntoConstraints="NO" id="LSV-LM-PD9">
+                                                    <rect key="frame" x="312" y="39" width="94" height="32"/>
                                                     <connections>
                                                         <action selector="stepperForTimeForRoundsAction:" destination="yvf-6Z-Yjv" eventType="valueChanged" id="fj3-A7-l4w"/>
                                                         <action selector="stepperTimeAction:" destination="rLZ-8d-nTp" eventType="valueChanged" id="9T3-NR-kHV"/>
                                                     </connections>
                                                 </stepper>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="j1c-On-GTr">
+                                                    <rect key="frame" x="213" y="4" width="193" height="32"/>
+                                                    <segments>
+                                                        <segment title="Время"/>
+                                                        <segment title="Повторения"/>
+                                                    </segments>
+                                                    <connections>
+                                                        <action selector="segmentControlAction:" destination="rLZ-8d-nTp" eventType="valueChanged" id="e8I-gd-1GC"/>
+                                                    </connections>
+                                                </segmentedControl>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Повторов: 1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wlk-Ey-d2x">
+                                                    <rect key="frame" x="20" y="44" width="94" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="j1c-On-GTr" secondAttribute="trailing" constant="8" id="25d-uY-QJF"/>
+                                                <constraint firstAttribute="bottom" secondItem="LSV-LM-PD9" secondAttribute="bottom" constant="5" id="2NJ-ev-RZt"/>
+                                                <constraint firstItem="LSV-LM-PD9" firstAttribute="top" secondItem="j1c-On-GTr" secondAttribute="bottom" constant="4" id="4uD-ny-I2v"/>
+                                                <constraint firstItem="Wlk-Ey-d2x" firstAttribute="top" secondItem="Cxf-jR-rhE" secondAttribute="bottom" constant="12" id="8dr-iQ-Mdv"/>
+                                                <constraint firstAttribute="trailing" secondItem="LSV-LM-PD9" secondAttribute="trailing" constant="8" id="Anq-nq-pYa"/>
+                                                <constraint firstItem="Cxf-jR-rhE" firstAttribute="leading" secondItem="XKe-Ii-d65" secondAttribute="leadingMargin" id="Iju-aY-jyr"/>
+                                                <constraint firstItem="j1c-On-GTr" firstAttribute="top" secondItem="XKe-Ii-d65" secondAttribute="top" constant="4" id="TLM-h7-37S"/>
+                                                <constraint firstItem="Cxf-jR-rhE" firstAttribute="top" secondItem="XKe-Ii-d65" secondAttribute="topMargin" id="UxA-TT-skK"/>
+                                                <constraint firstItem="Wlk-Ey-d2x" firstAttribute="leading" secondItem="XKe-Ii-d65" secondAttribute="leadingMargin" id="j5u-bb-eH1"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="rep" destination="Wlk-Ey-d2x" id="MLN-EP-jMR"/>
+                                            <outlet property="segmentControlTrain" destination="j1c-On-GTr" id="ZPt-7x-ikX"/>
                                             <outlet property="stepperTime" destination="LSV-LM-PD9" id="KCU-wG-uHv"/>
                                             <outlet property="time" destination="Cxf-jR-rhE" id="gdn-27-Vbx"/>
                                         </connections>

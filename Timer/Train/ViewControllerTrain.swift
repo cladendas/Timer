@@ -27,6 +27,8 @@ class ViewControllerTrain: UIViewController {
     ///Интервалы
     var roundsTrainQ = [[Double]]()
     var roundsQ = [[3.0], [4.0, 5.0, 6.0]]
+    var roundsQQ = [[Any]]()
+    var roundsTrainQQ = [[Any]]()
     
     var tmpRoundsTrain: [Double] = []
     
@@ -64,21 +66,20 @@ class ViewControllerTrain: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
        if case let controller as ViewControllerOptionsTrain = segue.destination, segue.identifier == "OptionsTimer" {
-//            controller.clouserNumOfRounds = { [unowned self] num in
-//                self.numOfRounds = num
-//                self.tableOfTrain.reloadData()
-//            }
-//            controller.clouserRounds = { [unowned self] rounds in
-//                self.roundsTrain = rounds
-//                self.timeForRound = self.roundsTrain[0]
-//                self.time.text = TimeFormatter.formatter(time: self.roundsTrain[0])
-//                self.tableOfTrain.reloadData()
-//            }
-            controller.clouserRoundsQ = { [unowned self] item in
-                self.numOfRounds = Int(item[0][0])
-                self.roundsQ = item
+//            controller.clouserRoundsQ = { [unowned self] item in
+//                self.numOfRounds = Int(item[0][0])
+//                self.roundsQ = item
 //                self.roundsTrainQ = Array(repeating: item[1], count: Int(item[0][0]))
-                self.time.text = TimeFormatter.formatter(time: self.roundsTrainQ[1][0])
+//                self.time.text = TimeFormatter.formatter(time: self.roundsTrainQ[1][0])
+//                self.tableOfTrain.reloadData()
+//            }
+            controller.clouserQ = { [unowned self] item in
+                
+                let ff = item[0][0] as! Int
+                
+                self.numOfRounds = ff
+                self.roundsQQ = item
+                self.roundsTrainQQ = Array(repeating: item[1], count: ff)
                 self.tableOfTrain.reloadData()
             }
         }
@@ -163,10 +164,11 @@ class ViewControllerTrain: UIViewController {
             
             //чтобы таймер стартовал с заданного значения
             if roundsTrain.count > 1 {
-                timeForRound = roundsQ[0][1]
+                print(roundsTrainQ[0][0])
+                timeForRound = roundsTrainQ[0][0]
                 
                 let ip = IndexPath(row: 0, section: 0)
-                roundsQ[0].remove(at: 0)
+                roundsTrainQ[0].remove(at: 0)
                 tableOfTrain.deleteRows(at: [ip], with: .fade)
 
                 tableOfTrain.reloadData()
@@ -205,20 +207,31 @@ class ViewControllerTrain: UIViewController {
 extension ViewControllerTrain: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return roundsTrainQ.count
+        return roundsTrainQQ.count
     }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return roundsTrainQ[section].count
+        return roundsTrainQQ[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellTrain", for: indexPath)
         
-        let time = TimeFormatter.formatter(time: roundsTrainQ[indexPath.section][indexPath.row])
+//        let time = TimeFormatter.formatter(time: roundsTrainQQ[indexPath.section][indexPath.row] as! Double)
         
-        cell.textLabel?.text = time
+        if roundsTrainQQ[indexPath.section][indexPath.row] is Double {
+            let time = TimeFormatter.formatter(time: roundsTrainQQ[indexPath.section][indexPath.row] as! Double)
+            
+            cell.textLabel?.text = "\(time)"
+            return cell
+        } else if roundsTrainQQ[indexPath.section][indexPath.row] is Int {
+            let time = roundsTrainQQ[indexPath.section][indexPath.row] as! Int
+            
+            cell.textLabel?.text = "Повторов: \(time)"
+            return cell
+        }
+
         return cell
     }
     

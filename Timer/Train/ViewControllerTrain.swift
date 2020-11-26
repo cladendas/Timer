@@ -22,12 +22,19 @@ class ViewControllerTrain: UIViewController {
     
     @IBOutlet var tableOfTrain: UITableView!
     
+    private var notificationCenter = NotificationCenter.default
+    
+    ///Хранит значения от наблюдателя CellOptionsTrain
+    private var intervalQ = [String : String]()
+    
     var roundsTrain: [Double] = [2.0, 24.0, 13]
     
     ///Интервалы
     var roundsTrainQ = [[Double]]()
     var roundsQ = [[3.0], [4.0, 5.0, 6.0]]
+    ///Хранит в чистом виде данные из ViewControllerOptionsTrain: кол-во раундов, повторения и/или временные интервалы
     var roundsQQ = [[Any]]()
+    ///Тренировка: временные интервалы и/или кол-во повторений
     var roundsTrainQQ = [[Any]]()
     
     var tmpRoundsTrain: [Double] = []
@@ -54,36 +61,81 @@ class ViewControllerTrain: UIViewController {
         rep.isHidden = true
         stop.isHidden = true
         continueLabel.isHidden = true
+        nextButton.isHidden = true
         
         tableOfTrain.delegate = self
         tableOfTrain.dataSource = self
         
-        timeForRound = roundsQ[0][0]
-        tmpTimeForRound = timeForRound
         tmpRoundsTrain = roundsTrain
         countNumOfTrains = roundsTrain.count
+        
+//        if let data = SaverLoader.load(for: "train") {
+//            roundsTrainQQ = data as! [[Any]]
+//            self.tableOfTrain.reloadData()
+//        }
+        
+//        let vc = ViewControllerOptionsTrain()
+//
+//        vc.clouserTableTrain = { [unowned self] item in
+//            let ff = item[0][0] as! Int
+//            self.numOfRounds = ff
+//            self.roundsQQ = item
+//            self.roundsTrainQQ = Array(repeating: item[1], count: ff)
+//            self.tableOfTrain.reloadData()
+//        }
+        
+        
+        timeForRound = findTime()
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-       if case let controller as ViewControllerOptionsTrain = segue.destination, segue.identifier == "OptionsTimer" {
-//            controller.clouserRoundsQ = { [unowned self] item in
-//                self.numOfRounds = Int(item[0][0])
-//                self.roundsQ = item
-//                self.roundsTrainQ = Array(repeating: item[1], count: Int(item[0][0]))
-//                self.time.text = TimeFormatter.formatter(time: self.roundsTrainQ[1][0])
-//                self.tableOfTrain.reloadData()
-//            }
-            controller.clouserQ = { [unowned self] item in
-                
-                let ff = item[0][0] as! Int
-                
-                self.numOfRounds = ff
-                self.roundsQQ = item
-                self.roundsTrainQQ = Array(repeating: item[1], count: ff)
-                self.tableOfTrain.reloadData()
+    override func viewWillAppear(_ animated: Bool) {
+        notificationCenter.addObserver(self, selector: #selector(getCellValue), name: .train, object: nil)
+    }
+    
+    @objc
+    func getCellValue(notification: Notification) {
+        guard let item = notification.userInfo else { return }
+
+        if let intervals = item["intervals"], let rounds = item["rounds"] {
+            
+            let rr = intervals as! [Any]
+            let gg = rounds as! Int
+            
+            roundsTrainQQ = Array(repeating: rr, count: gg)
+            
+            tableOfTrain.reloadData()
+            notificationCenter.removeObserver(self)
+        }  
+    }
+    
+    ///Поиск в тренировке временного интервала и инициалищация его значением перемнной для таймера
+    func findTime() -> Double {
+        for section in roundsTrainQQ {
+            for item in section {
+                if item is Double {
+                    timeForRound = item as! Double
+                    return timeForRound
+                }
             }
         }
+        
+        return 0.0
     }
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//       if case let controller as ViewControllerOptionsTrain = segue.destination, segue.identifier == "OptionsTimer" {
+//            controller.clouserTableTrain = { [unowned self] item in
+//                let ff = item[0][0] as! Int
+//                self.numOfRounds = ff
+//                self.roundsQQ = item
+//                self.roundsTrainQQ = Array(repeating: item[1], count: ff)
+//                self.tableOfTrain.reloadData()
+//            }
+//        }
+//        timeForRound = findTime()
+//
+//        SaverLoader.save(value: roundsTrainQQ, for: "train")
+//    }
     
     @IBAction func startAction(_ sender: UIButton) {
         pause.isHidden = false
@@ -93,8 +145,26 @@ class ViewControllerTrain: UIViewController {
         numberOfRep.isHidden = false
         optionsBarItem.isEnabled = false
         
+//        if roundsTrainQQ[0][0] is Double {
+//            timerForTrain = timer()
+//        } else if roundsTrainQQ[0][0] is Int {
+//            nextButton.isHidden = false
+//        }
+        
         timerForTrain = timer()
+        
     }
+    
+    @IBOutlet var nextButton: UIButton!
+    
+    
+    @IBAction func nextAction(_ sender: UIButton) {
+        nextButton.isHidden = true
+        roundsTrainQQ[0].remove(at: 0)
+        tableOfTrain.reloadData()
+        
+    }
+    
     
     @IBAction func pauseAction(_ sender: UIButton) {
         pause.isHidden = true
@@ -207,10 +277,10 @@ class ViewControllerTrain: UIViewController {
 extension ViewControllerTrain: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        
         return roundsTrainQQ.count
     }
-    
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return roundsTrainQQ[section].count
     }

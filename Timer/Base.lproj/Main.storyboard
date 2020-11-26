@@ -754,6 +754,15 @@
                                     <action selector="stopAction:" destination="mZd-ic-WK7" eventType="touchUpInside" id="CNY-UM-Mff"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fg3-3b-F3a">
+                                <rect key="frame" x="322" y="475" width="73" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="0.61587322339999995" blue="0.33858713759999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Выполнил"/>
+                                <connections>
+                                    <action selector="nextAction:" destination="mZd-ic-WK7" eventType="touchUpInside" id="r4A-Uz-Ltm"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                         <constraints>
@@ -793,6 +802,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="continueLabel" destination="5ii-0M-bzM" id="bJj-m3-4jq"/>
+                        <outlet property="nextButton" destination="fg3-3b-F3a" id="cVO-U2-zpY"/>
                         <outlet property="numberOfRep" destination="lzG-f7-Aio" id="d6N-Fo-bTC"/>
                         <outlet property="optionsBarItem" destination="rTl-CR-fTs" id="BrO-nB-Y0f"/>
                         <outlet property="pause" destination="xGD-cj-1fl" id="ppI-Dp-h9v"/>

@@ -8,11 +8,6 @@
 
 import UIKit
 
-extension NSNotification.Name {
-    static let interval = NSNotification.Name.init("interval")
-    static let train = NSNotification.Name.init("train")
-}
-
 class CellOptionsTrain: UITableViewCell {
 
     @IBOutlet var time: UILabel!
@@ -28,8 +23,8 @@ class CellOptionsTrain: UITableViewCell {
     private let leadingTimeLabel = "Интервал "
     ///Как будет начинаться строка с кол-ом повторений
     private let leadingRepLabel = "Повторов: "
-    
-    private var notificationCenter = NotificationCenter.default
+    ///Колбэк для передачи данных из ячейки
+    var clouserStepperValue: ((Any) -> Void)?
     
     @IBAction func segmentControlAction(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
@@ -37,9 +32,6 @@ class CellOptionsTrain: UITableViewCell {
             self.time.isHidden = false
             self.time.text = startTime
             self.stepperTime.value = 1.0
-
-            let time = ["time" : stepperTime.value * 5]
-            notificationCenter.post(name: .interval, object: self, userInfo: time)
         }
         
         if segmentControlTrain.selectedSegmentIndex == 1 {
@@ -47,9 +39,6 @@ class CellOptionsTrain: UITableViewCell {
             self.rep.isHidden = false
             self.rep.text = startRep
             self.stepperTime.value = 1.0
-
-            let exercise = ["exercise" : Int(stepperTime.value)]
-            notificationCenter.post(name: .interval, object: self, userInfo: exercise)
         }
     }
     
@@ -60,16 +49,14 @@ class CellOptionsTrain: UITableViewCell {
             let tmpLabelText = leadingTimeLabel + tmpValue
             time.text = tmpLabelText
             
-            let time = ["time" : tmpValue]
-            notificationCenter.post(name: .interval, object: self, userInfo: time)
+            clouserStepperValue?(sender.value * 5)
         }
         
         if segmentControlTrain.selectedSegmentIndex == 1 {
             let tmpLabelText = leadingRepLabel + "\(Int(sender.value))"
             rep.text = tmpLabelText
             
-            let exercise = ["exercise" : Int(sender.value)]
-            notificationCenter.post(name: .interval, object: self, userInfo: exercise)
+            clouserStepperValue?(Int(sender.value))
         }
     }
     

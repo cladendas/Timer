@@ -53,6 +53,8 @@ class ViewControllerTrain: UIViewController {
     ///Текущее время раунда
     var currentTimeOfRound: Double = 00.00
     
+    var viewControllerOptionsTrain = ViewControllerOptionsTrain()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -68,44 +70,8 @@ class ViewControllerTrain: UIViewController {
         
         tmpRoundsTrain = roundsTrain
         countNumOfTrains = roundsTrain.count
-        
-//        if let data = SaverLoader.load(for: "train") {
-//            roundsTrainQQ = data as! [[Any]]
-//            self.tableOfTrain.reloadData()
-//        }
-        
-//        let vc = ViewControllerOptionsTrain()
-//
-//        vc.clouserTableTrain = { [unowned self] item in
-//            let ff = item[0][0] as! Int
-//            self.numOfRounds = ff
-//            self.roundsQQ = item
-//            self.roundsTrainQQ = Array(repeating: item[1], count: ff)
-//            self.tableOfTrain.reloadData()
-//        }
-        
-        
-        timeForRound = findTime()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        notificationCenter.addObserver(self, selector: #selector(getCellValue), name: .train, object: nil)
-    }
-    
-    @objc
-    func getCellValue(notification: Notification) {
-        guard let item = notification.userInfo else { return }
 
-        if let intervals = item["intervals"], let rounds = item["rounds"] {
-            
-            let rr = intervals as! [Any]
-            let gg = rounds as! Int
-            
-            roundsTrainQQ = Array(repeating: rr, count: gg)
-            
-            tableOfTrain.reloadData()
-            notificationCenter.removeObserver(self)
-        }  
+        timeForRound = findTime()
     }
     
     ///Поиск в тренировке временного интервала и инициалищация его значением перемнной для таймера
@@ -122,20 +88,25 @@ class ViewControllerTrain: UIViewController {
         return 0.0
     }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//       if case let controller as ViewControllerOptionsTrain = segue.destination, segue.identifier == "OptionsTimer" {
-//            controller.clouserTableTrain = { [unowned self] item in
-//                let ff = item[0][0] as! Int
-//                self.numOfRounds = ff
-//                self.roundsQQ = item
-//                self.roundsTrainQQ = Array(repeating: item[1], count: ff)
-//                self.tableOfTrain.reloadData()
-//            }
-//        }
-//        timeForRound = findTime()
-//
+    override func viewWillAppear(_ animated: Bool) {
+        viewControllerOptionsTrain.clouserTableTrain = { [unowned self] item in
+            let ff = item[0][0] as! Int
+            self.numOfRounds = ff
+            self.roundsQQ = item
+            self.roundsTrainQQ = Array(repeating: item[1], count: ff)
+            self.tableOfTrain.reloadData()
+        }
+        timeForRound = findTime()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+       if case let controller as ViewControllerOptionsTrain = segue.destination, segue.identifier == "OptionsTimer" {
+        viewControllerOptionsTrain = controller
+        }
+        timeForRound = findTime()
+
 //        SaverLoader.save(value: roundsTrainQQ, for: "train")
-//    }
+    }
     
     @IBAction func startAction(_ sender: UIButton) {
         pause.isHidden = false
@@ -277,7 +248,6 @@ class ViewControllerTrain: UIViewController {
 extension ViewControllerTrain: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        
         return roundsTrainQQ.count
     }
 
@@ -287,9 +257,7 @@ extension ViewControllerTrain: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellTrain", for: indexPath)
-        
-//        let time = TimeFormatter.formatter(time: roundsTrainQQ[indexPath.section][indexPath.row] as! Double)
-        
+
         if roundsTrainQQ[indexPath.section][indexPath.row] is Double {
             let time = TimeFormatter.formatter(time: roundsTrainQQ[indexPath.section][indexPath.row] as! Double)
             
@@ -301,7 +269,6 @@ extension ViewControllerTrain: UITableViewDelegate, UITableViewDataSource {
             cell.textLabel?.text = "Повторов: \(time)"
             return cell
         }
-
         return cell
     }
     

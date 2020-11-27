@@ -14,18 +14,18 @@ class ViewControllerOptionsTrain: UIViewController {
     @IBOutlet var numberOfRounds: UILabel!
     @IBOutlet var stepperNumOfRounds: UIStepper!
     
-    private var notificationCenter = NotificationCenter.default
-    
     ///Хранит значения от наблюдателя CellOptionsTrain
     private var intervalQ = [String : Any]()
 
     ///Тренировка представлена в виде кол-ва раундов (здесь элемент под индексом 0) и временными интервалами (здесь элемент массива, который под индексом 1)
-    var roundsQQ: [[Any]] = [[1], [5.0, 4, 10.0]]
-
-    var stepperRoundValue = 5.0
-
-    ///Колбэк для данных в таблице настройки тренировки
-//    var clouserTableTrain: (([[Any]]) -> Void)?
+    var train = [[Any]]()
+    ///Колбэк для передачи данных о текущей тренировке
+    var clouserTableTrain: (([[Any]]) -> Void)?
+    
+    ///Значение для нового интервала. При добавлении нового интервала он всегда будет временным и с указанным значением
+    private var newInterval = 5.0
+    
+    private var notificationCenter = NotificationCenter.default
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,20 +38,29 @@ class ViewControllerOptionsTrain: UIViewController {
 //            clouserQ?(roundsQQ)
 //        }
         
-//        clouserTableTrain?(roundsQQ)
+        clouserTableTrain?(train)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        
-        let train = ["rounds" : roundsQQ[0][0], "intervals" : roundsQQ[1]]
-        notificationCenter.post(name: .train, object: self, userInfo: train)
-        
-        notificationCenter.removeObserver(self)
+        clouserTableTrain?(train)
+        print(train)
     }
     
     @IBAction func addTimeAction(_ sender: Any) {
-        roundsQQ[1].append(stepperRoundValue)
-//        clouserTableTrain?(roundsQQ)
+
+        if train.indices.contains(1) {
+            train[1].append(newInterval)
+            print("1", train)
+        } else if train.indices.contains(0) {
+            train.append([newInterval])
+            print("2", train)
+        } else {
+            train.append([1])
+            train.append([newInterval])
+            print("3", train)
+        }
+        
+        clouserTableTrain?(train)
         tableOfTrain.reloadData()
 //        SaverLoader.save(value: roundsQQ, for: "round")
     }
@@ -59,46 +68,41 @@ class ViewControllerOptionsTrain: UIViewController {
     @IBAction func stepperForNumRoundsAction(_ sender: UIStepper) {
         let tmpValue = Int(sender.value)
         numberOfRounds.text = "Кол-во раундов: \(tmpValue)"
-        roundsQQ[0] = [Int(sender.value)]
-//        clouserTableTrain?(roundsQQ)
-        tableOfTrain.reloadData()
-//        SaverLoader.save(value: roundsQQ, for: "round")
-        print(roundsQQ[1])
-    }
+        
+        if train.indices.contains(0) {
+            train[0][0] = Int(sender.value)
+            print("4", train)
+        } else {
+            train.append([Int(sender.value)])
+            print("5", train)
+        }
 
+        clouserTableTrain?(train)
+//        SaverLoader.save(value: roundsQQ, for: "round")
+    }
 }
 
 extension ViewControllerOptionsTrain: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return roundsQQ[1].count
+        
+        var tt = 0
+        
+        if train.indices.contains(1) {
+            tt = train[1].count
+        }
+        
+        return tt
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellOptions", for: indexPath) as! CellOptionsTrain
-
-        notificationCenter.addObserver(self, selector: #selector(getCellValue), name: .interval, object: nil)
         
-        if let time = intervalQ["time"] {
-            roundsQQ[1][indexPath.row] = time
-//            notificationCenter.removeObserver(self)
-        } else if let exercise = intervalQ["exercise"] {
-            roundsQQ[1][indexPath.row] = exercise
-//            notificationCenter.removeObserver(self)
+        cell.clouserStepperValue = { item in
+            self.train[1][indexPath.row] = item
+            self.clouserTableTrain?(self.train)
         }
-        
         return cell
-    }
-    
-    @objc
-    func getCellValue(notification: Notification) {
-        guard let item = notification.userInfo else { return }
-
-        if let time = item["time"] {
-            intervalQ = ["time" : time]
-        } else if let exercise = item["exercise"] {
-            intervalQ =  ["exercise" : exercise as! Int]
-        }
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -107,8 +111,8 @@ extension ViewControllerOptionsTrain: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            roundsQQ[1].remove(at: indexPath.row)
-//            clouserTableTrain?(roundsQQ)
+            train[1].remove(at: indexPath.row)
+            clouserTableTrain?(train)
             tableView.deleteRows(at: [indexPath], with: .fade)
             tableOfTrain.reloadData()
 //            SaverLoader.save(value: roundsQQ, for: "round")

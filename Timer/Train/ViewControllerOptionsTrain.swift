@@ -8,6 +8,12 @@
 
 import UIKit
 
+extension NSNotification.Name {
+    static let interval = NSNotification.Name.init("interval")
+    static let train = NSNotification.Name.init("train")
+    static let tmp = NSNotification.Name.init("tmp")
+}
+
 class ViewControllerOptionsTrain: UIViewController {
     
     @IBOutlet var tableOfTrain: UITableView!
@@ -17,13 +23,14 @@ class ViewControllerOptionsTrain: UIViewController {
     ///Хранит значения от наблюдателя CellOptionsTrain
     private var intervalQ = [String : Any]()
 
-    ///Тренировка представлена в виде кол-ва раундов (здесь элемент под индексом 0) и временными интервалами (здесь элемент массива, который под индексом 1)
-    var train = [[Any]]()
+    ///Тренировка представлена в виде кол-ва раундов (здесь элемент под индексом 0) и  интервалами повторений или времени (здесь элемент массива, который под индексом 1)
+    /// [[2], [20, 5.0, 2.0, 20]]
+    var train: [[String]] = [["1"], ["1", "5.0"]]
     ///Колбэк для передачи данных о текущей тренировке
     var clouserTableTrain: (([[Any]]) -> Void)?
     
     ///Значение для нового интервала. При добавлении нового интервала он всегда будет временным и с указанным значением
-    private var newInterval = 5.0
+    private var newInterval = "5.0"
     
     private var notificationCenter = NotificationCenter.default
 
@@ -33,36 +40,40 @@ class ViewControllerOptionsTrain: UIViewController {
         self.tableOfTrain.delegate = self
         self.tableOfTrain.dataSource = self
         
-//        if let data = SaverLoader.load(for: "round") {
-//            roundsQQ = data as! [[Any]]
-//            clouserQ?(roundsQQ)
-//        }
-        
-        clouserTableTrain?(train)
+        if let data = SaverLoader.load(for: "trainOptions") {
+            self.train = data
+
+            tableOfTrain.reloadData()
+
+            numberOfRounds.text = "Кол-во раундов: \(self.train[0][0])"
+            stepperNumOfRounds.value = Double(self.train[0][0]) ?? 0.0
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
+        let tmpTrain = ["train" : self.train]
+        notificationCenter.post(name: .train, object: self, userInfo: tmpTrain)
+        
         clouserTableTrain?(train)
-        print(train)
     }
     
     @IBAction func addTimeAction(_ sender: Any) {
 
         if train.indices.contains(1) {
             train[1].append(newInterval)
-            print("1", train)
         } else if train.indices.contains(0) {
             train.append([newInterval])
-            print("2", train)
         } else {
-            train.append([1])
+            train.append(["1"])
             train.append([newInterval])
-            print("3", train)
         }
         
-        clouserTableTrain?(train)
         tableOfTrain.reloadData()
-//        SaverLoader.save(value: roundsQQ, for: "round")
+        let train = ["train" : self.train]
+        notificationCenter.post(name: .train, object: self, userInfo: train)
+        
+        SaverLoader.save(value: self.train, for: "trainOptions")
+        print("Сохранение при добавлении интервала", self.train)
     }
     
     @IBAction func stepperForNumRoundsAction(_ sender: UIStepper) {
@@ -70,15 +81,17 @@ class ViewControllerOptionsTrain: UIViewController {
         numberOfRounds.text = "Кол-во раундов: \(tmpValue)"
         
         if train.indices.contains(0) {
-            train[0][0] = Int(sender.value)
-            print("4", train)
+            train[0][0] = String(tmpValue)
         } else {
-            train.append([Int(sender.value)])
-            print("5", train)
+            train.append([String(tmpValue)])
+            train.append([newInterval])
         }
-
-        clouserTableTrain?(train)
-//        SaverLoader.save(value: roundsQQ, for: "round")
+        
+        let notifTrain = ["train" : self.train]
+        notificationCenter.post(name: .train, object: self, userInfo: notifTrain)
+        
+        SaverLoader.save(value: self.train, for: "trainOptions")
+        print("Сохранение при изменении кол-ва раундов", self.train)
     }
 }
 
@@ -98,10 +111,49 @@ extension ViewControllerOptionsTrain: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellOptions", for: indexPath) as! CellOptionsTrain
         
-        cell.clouserStepperValue = { item in
-            self.train[1][indexPath.row] = item
-            self.clouserTableTrain?(self.train)
+        if self.train[1][indexPath.row].contains("."), let tmpDouble = Double(self.train[1][indexPath.row]) {
+            cell.time.isHidden = false
+            cell.rep.isHidden = true
+            cell.segmentControlTrain.selectedSegmentIndex = 0
+            cell.stepperTime.value = tmpDouble
+            cell.time.text = "Интервал \(TimeFormatter.formatter(time: tmpDouble))"
+            
+            cell.clouserStepperValue = { item in
+            
+                self.train[1][indexPath.row] = "\(item)"
+                self.clouserTableTrain?(self.train)
+                
+                let train = ["train" : self.train]
+                self.notificationCenter.post(name: .train, object: self, userInfo: train)
+                SaverLoader.save(value: self.train, for: "trainOptions")
+            }
+            
+            return cell
+            
+        } else if let tmpInt = Int(self.train[1][indexPath.row]) {
+            cell.time.isHidden = true
+            cell.rep.isHidden = false
+            cell.segmentControlTrain.selectedSegmentIndex = 1
+            cell.stepperTime.value = Double(tmpInt)
+            cell.rep.text = "Повторов: \(tmpInt)"
+            
+            cell.clouserStepperValue = { item in
+            
+                self.train[1][indexPath.row] = "\(item)"
+                self.clouserTableTrain?(self.train)
+                
+                let train = ["train" : self.train]
+                self.notificationCenter.post(name: .train, object: self, userInfo: train)
+                SaverLoader.save(value: self.train, for: "trainOptions")
+            }
+            
+//            let train = ["train" : self.train]
+//            self.notificationCenter.post(name: .train, object: self, userInfo: train)
+//            SaverLoader.save(value: self.train, for: "trainOptions")
+            
+            return cell
         }
+
         return cell
     }
     
@@ -114,8 +166,13 @@ extension ViewControllerOptionsTrain: UITableViewDelegate, UITableViewDataSource
             train[1].remove(at: indexPath.row)
             clouserTableTrain?(train)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            
+            let train = ["train" : self.train]
+            self.notificationCenter.post(name: .train, object: self, userInfo: train)
+            
             tableOfTrain.reloadData()
-//            SaverLoader.save(value: roundsQQ, for: "round")
+
+            SaverLoader.save(value: self.train, for: "trainOptions")
         }
     }
 }

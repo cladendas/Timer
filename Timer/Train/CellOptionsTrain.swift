@@ -10,9 +10,13 @@ import UIKit
 
 class CellOptionsTrain: UITableViewCell {
 
+    ///Временной интервал
     @IBOutlet var time: UILabel!
+    ///Интервал повторений
     @IBOutlet var rep: UILabel!
+    ///Выбор между временным интервалом и интервалом повторений
     @IBOutlet var segmentControlTrain: UISegmentedControl!
+    ///Установка значения для выбранного интервала
     @IBOutlet var stepperTime: UIStepper!
     
     ///Начальное значение лейбла для временного интервала
@@ -32,6 +36,8 @@ class CellOptionsTrain: UITableViewCell {
             self.time.isHidden = false
             self.time.text = startTime
             self.stepperTime.value = 1.0
+            
+            clouserStepperValue?(stepperTime.value * 5)
         }
         
         if segmentControlTrain.selectedSegmentIndex == 1 {
@@ -39,6 +45,10 @@ class CellOptionsTrain: UITableViewCell {
             self.rep.isHidden = false
             self.rep.text = startRep
             self.stepperTime.value = 1.0
+            
+            let intValue = Int(stepperTime.value)
+            
+            clouserStepperValue?(intValue)
         }
     }
     
@@ -56,7 +66,9 @@ class CellOptionsTrain: UITableViewCell {
             let tmpLabelText = leadingRepLabel + "\(Int(sender.value))"
             rep.text = tmpLabelText
             
-            clouserStepperValue?(Int(sender.value))
+            let intValue = Int(sender.value)
+            
+            clouserStepperValue?(intValue)
         }
     }
     

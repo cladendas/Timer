@@ -29,7 +29,7 @@ class ViewControllerRounds: UIViewController {
     var clouserTimeForRes: ((Double) -> Void)?
     
     ///Хранит данные о кол-ве раундов [0], времени раунда [1], времени отдыха [2]
-    var rounds = [[Double]]()
+    var rounds = [[String]]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,15 +42,19 @@ class ViewControllerRounds: UIViewController {
         clouserTimeForRes?(5.0)
 
         if let data = SaverLoader.load(for: "rounds") {
-            rounds = data as! [[Double]]
+            rounds = data
         } else {
             rounds = []
         }
     }
     
+    func convToString(_ value: Any) -> String {
+        return "\(value)"
+    }
+    
     @IBAction func addRounds(_ sender: UIBarButtonItem) {
         
-        rounds.append([stepperForRound.value, stepperForTimeForRound.value, stepperForTimeRes.value])
+        rounds.append([convToString(stepperForRound.value), convToString(stepperForTimeForRound.value), convToString(stepperForTimeRes.value)])
         
         tableRounds.reloadData()
         
@@ -77,11 +81,15 @@ class ViewControllerRounds: UIViewController {
     }
     
     ///Преобразует в [String] данные о кол-ве раундов, времени раунда, времени отдыха
-    func formatInfoRound(round: Double, timeForRound: Double, timeForRes: Double) -> [String] {
+    func formatInfoRound(round: String, timeForRound: String, timeForRes: String) -> [String] {
+
+        let tmpRound = Int(Double(round) ?? 0.0)
+        let tmpTimeForRound = Double(timeForRound) ?? 0.0
+        let tmpTimeForRes = Double(timeForRes) ?? 0.0
         
-        let round = String(Int(round))
-        let timeForRound = TimeFormatter.formatter(time: timeForRound)
-        let timeForRes = TimeFormatter.formatter(time: timeForRes)
+        let round = String(tmpRound)
+        let timeForRound = TimeFormatter.formatter(time: tmpTimeForRound)
+        let timeForRes = TimeFormatter.formatter(time: tmpTimeForRes)
         
         return [round, timeForRound, timeForRes]
     }
@@ -108,9 +116,9 @@ extension ViewControllerRounds: UITableViewDelegate, UITableViewDataSource {
         
         let ff = formatInfoRound(round: rounds[indexPath.row][0], timeForRound: rounds[indexPath.row][1], timeForRes: rounds[indexPath.row][2])
         
-        clouserNumOfRounds?(Int(rounds[indexPath.row][0]))
-        clouserTimeForRound?(rounds[indexPath.row][1])
-        clouserTimeForRes?(rounds[indexPath.row][2])
+        clouserNumOfRounds?(rounds[indexPath.row][0] as! Int)
+        clouserTimeForRound?(rounds[indexPath.row][1] as! Double)
+        clouserTimeForRes?(rounds[indexPath.row][2] as! Double)
         
         numberOfRounds.text = "Кол-во раундов: \(ff[0])"
         timeForRound.text = "Время раунда: \(ff[1])"

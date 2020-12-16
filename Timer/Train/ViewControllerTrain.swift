@@ -11,14 +11,18 @@ import UIKit
 class ViewControllerTrain: UIViewController {
     
     @IBOutlet var optionsBarItem: UIBarButtonItem!
+    ///Лэйбл текущего интервала
     @IBOutlet var time: UILabel!
+    ///Кол-во повторений
     @IBOutlet var numberOfRep: UILabel!
     
     @IBOutlet var stop: UIButton!
     @IBOutlet var pause: UIButton!
     @IBOutlet var start: UIButton!
+    ///Продолжить работу таймера после паузы
     @IBOutlet var continueLabel: UIButton!
     @IBOutlet var rep: UIButton!
+    ///Следующий интервал. Доступна только при работе интервала повторений
     @IBOutlet var nextButton: UIButton!
     
     @IBOutlet var tableOfTrain: UITableView!
@@ -44,12 +48,13 @@ class ViewControllerTrain: UIViewController {
     var countNumOfTrains = 0
     var countRep = 0
     
+    ///Таймер
     var timerForTrain = Timer()
-    ///Время для таймера раунда (максимум 5999.99)
+    ///Хранит временной интервал (максимум 5999.99)
     private var timeForRound: Double = 10.0
-    ///Переменная для хранения начального значения времени таймера раунда (максимум 5999.99)
+    ///Хранит начальное значение временного интервала из переменной  timeForRound (максимум 5999.99)
     private var tmpTimeForRound: Double = 0.0
-    ///Переменная для фиксации значения текущего времени
+    ///Хранит текущее значение временного интервала
     var tmpTime: Double = 00.00
     ///Текущее время раунда
     var currentTimeOfRound: Double = 00.00
@@ -74,27 +79,23 @@ class ViewControllerTrain: UIViewController {
         
         tmpRoundsTrain = roundsTrain
         countNumOfTrains = roundsTrain.count
-
-        timeForRound = findTime()
         
         if let data = SaverLoader.load(for: "train") {
             self.roundsTrainQQ = data
             self.numOfRounds = data.count
             tableOfTrain.reloadData()
-            print("viewDidLoad Train", self.roundsTrainQQ)
         }
+        
+        changeFontForTimeLabel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        notificationCenter.addObserver(self, selector: #selector(gg), name: .train, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(getNotification), name: .train, object: nil)
     }
     
-//    override func viewDidDisappear(_ animated: Bool) {
-//        notificationCenter.addObserver(self, selector: #selector(gg), name: .train, object: nil)
-//    }
-    
-    ///Поиск в тренировке временного интервала и инициалищация его значением переменной для таймера
-    func findTime() -> Double {
+    ///Поиск в тренировке временного интервала
+    ///- Возвращается первое попавшееся значение
+    private func findTime() -> Double {
         
         guard let tmpRoundsTrainQQ = roundsTrainQQ else { return 0.0 }
         
@@ -116,24 +117,24 @@ class ViewControllerTrain: UIViewController {
         notificationCenter.removeObserver(self)
     }
     
-    func checkTimeOrExercise() -> String {
-        
-        let dd = checkTypeInterval()
-        
-        if dd.keys.contains("time") {
-            return "time"
-        } else if dd.keys.contains("exercise") {
-            return "exercise"
-        }
-        
-        return "-1"
-    }
+//    func checkTimeOrExercise() -> String {
+//
+//        let dd = checkTypeInterval()
+//
+//        if dd.keys.contains("time") {
+//            return "time"
+//        } else if dd.keys.contains("exercise") {
+//            return "exercise"
+//        }
+//
+//        return "-1"
+//    }
     
     ///Проверка типа интервала первого элемента. Возвращает словарь: в ключе тип интервала (time, exercise) и соответствующее значение
     ///- В блоке guard проверится наличие первого элемента в первом секторе
-    private func checkTypeInterval() -> [String: Any] {
+    private func checkTypeInterval() -> [String: String] {
         
-        guard let first = roundsTrainQQ?[0].first, let _ = roundsTrainQQ else { return ["finish" : 0] }
+        guard let first = roundsTrainQQ?[0].first, let _ = roundsTrainQQ else { return ["finish" : "0"] }
         
         if first.contains(".") {
             return ["time" : first]
@@ -143,7 +144,7 @@ class ViewControllerTrain: UIViewController {
     }
     
     @objc
-    func gg(notification: Notification) {
+    func getNotification(notification: Notification) {
         guard let item = notification.userInfo as? [String: [[String]]] else { return }
         
         if let train = item["train"] {
@@ -158,7 +159,6 @@ class ViewControllerTrain: UIViewController {
     }
     
     @IBAction func startAction(_ sender: UIButton) {
-        pause.isHidden = false
         rep.isHidden = false
         start.isHidden = true
         stop.isHidden = true
@@ -166,8 +166,10 @@ class ViewControllerTrain: UIViewController {
         optionsBarItem.isEnabled = false
         
         if let _ = checkTypeInterval()["time"] {
+            pause.isHidden = false
             timerForTrain = timer()
         } else if let _ = checkTypeInterval()["exercise"] {
+            pause.isHidden = true
             nextButton.isHidden = false
         }
     }
@@ -175,8 +177,9 @@ class ViewControllerTrain: UIViewController {
     ///У лейбла таймера выставит соотвествующее значение
     private func changeFontForTimeLabel() {
         if let time = checkTypeInterval()["time"] {
-            let tmp = time as! Double
+            let tmp = Double(time) ?? 0.0
             timeForRound = tmp
+            tmpTimeForRound = tmp
             self.time.font = UIFont.monospacedDigitSystemFont(ofSize: 70, weight: .regular)
             self.time.text = TimeFormatter.formatter(time: tmp)
         } else if let exercise = checkTypeInterval()["exercise"] {
@@ -187,26 +190,27 @@ class ViewControllerTrain: UIViewController {
     }
     
     @IBAction func nextAction(_ sender: UIButton) {
-        if let time = checkTypeInterval()["time"] {
-            roundsTrainQQ?[0].remove(at: 0)
-            tableOfTrain.reloadData()
-            timeForRound = time as! Double
-            timerForTrain = timer()
-            
-        } else if let _ = checkTypeInterval()["exercise"] {
-            
-            roundsTrainQQ?[0].remove(at: 0)
-            tableOfTrain.reloadData()
-            nextButton.isHidden = false
-            
-            if let ff = checkTypeInterval()["exercise"] {
-                self.time.text = "Повторов: \(ff)"
-            }
-        }
+        
+        roundsTrainQQ?[0].remove(at: 0)
+        tableOfTrain.reloadData()
         
         if roundsTrainQQ?[0].count == 0 {
             roundsTrainQQ?.remove(at: 0)
             tableOfTrain.reloadData()
+        }
+        
+        if roundsTrainQQ?.count == 0 {
+            stopAction(stop)
+            self.time.text = "Допрыгался!"
+        } else if let time = checkTypeInterval()["time"] {
+            nextButton.isHidden = true
+            pause.isHidden = false
+            timeForRound = Double(time) ?? 0.0
+            timerForTrain = timer()
+            
+        } else if let exercise = checkTypeInterval()["exercise"] {
+            nextButton.isHidden = false
+            self.time.text = "Повторов: \(exercise)"
         }
     }
     
@@ -246,6 +250,7 @@ class ViewControllerTrain: UIViewController {
         start.isHidden = false
         numberOfRep.isHidden = true
         rep.isHidden = true
+        nextButton.isHidden = true
         continueLabel.isHidden = true
         optionsBarItem.isEnabled = true
         
@@ -277,29 +282,30 @@ class ViewControllerTrain: UIViewController {
         if timeForRound <= 0.0 {
             timerForTrain.invalidate()
             
-            if roundsTrain.count > 1 {
-                
-                let ip = IndexPath(row: 0, section: 0)
-                tableOfTrain.deleteRows(at: [ip], with: .fade)
-
-                tableOfTrain.reloadData()
-                
+            roundsTrainQQ?[0].remove(at: 0)
+            tableOfTrain.reloadData()
+            
+            if let time = checkTypeInterval()["time"] {
+                pause.isHidden = false
+                nextButton.isHidden = true
+                timeForRound = Double(time) ?? 0.0
                 timerForTrain = timer()
-            } else if roundsTrain.count == 1 {
-                if let first = roundsTrain.first {
-                    timeForRound = first
-                }
-                
-                tableOfTrain.reloadData()
-                
-                timerForTrain = timer()
+            } else if let exercise = checkTypeInterval()["exercise"] {
+                pause.isHidden = true
+                nextButton.isHidden = false
+                self.time.text = "Повторов: \(exercise)"
+            }
+            
+//            if roundsTrainQQ?[0].count == 0 {
+//                roundsTrainQQ?.remove(at: 0)
+//                tableOfTrain.reloadData()
+//            }
+            
+            if roundsTrainQQ?.count == 0 {
+                stopAction(stop)
+                self.time.text = "Допрыгался!"
             }
 
-        } else if roundsTrain.count == 0  {
-            timerForTrain.invalidate()
-            roundsTrain = tmpRoundsTrain
-            tableOfTrain.reloadData()
-            time.text = TimeFormatter.formatter(time: timeForRound)
         } else {
             time.text = TimeFormatter.formatter(time: timeForRound)
         }

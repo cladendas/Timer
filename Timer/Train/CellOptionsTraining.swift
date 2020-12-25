@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CellOptionsTrain: UITableViewCell {
+class CellOptionsTraining: UITableViewCell {
 
     ///Временной интервал
     @IBOutlet var time: UILabel!

@@ -25,22 +25,22 @@ class ViewControllerTrain: UIViewController {
     ///Следующий интервал. Доступна только при работе интервала повторений
     @IBOutlet var nextButton: UIButton!
     
-    @IBOutlet var tableOfTrain: UITableView!
+    @IBOutlet var tableOfTraining: UITableView!
     
     private var notificationCenter = NotificationCenter.default
     
     ///Хранит значения от наблюдателя CellOptionsTrain
     private var intervalQ = [String : String]()
     
-    var roundsTrain: [Double] = [2.0, 24.0, 13]
+    var roundsTraining: [Double] = [2.0, 24.0, 13]
     
     ///Интервалы
-    var roundsTrainQ = [[Double]]()
+    var roundsTrainingQ = [[Double]]()
     var roundsQ = [[3.0], [4.0, 5.0, 6.0]]
     ///Хранит в чистом виде данные из ViewControllerOptionsTrain: кол-во раундов, повторения и/или временные интервалы
     var roundsQQ = [[Any]]()
     ///Тренировка: временные интервалы и/или кол-во повторений
-    var roundsTrainQQ: [[String]]?
+    var roundsTrainingQQ: [[String]]?
     
     var tmpRoundsTrain: [Double] = []
     
@@ -48,10 +48,16 @@ class ViewControllerTrain: UIViewController {
     var countNumOfTrains = 0
     var countRep = 0
     
-    ///Таймер
-    var timerForTrain = Timer()
+    ///Таймер для всей тренировки
+    var timerForTraining = Timer()
+    ///Хранит время, ушедшее на тренировку
+    var timeForTraining: Double = 0.0
+    ///Хранит время тренировки в случае паузы
+    var tmpTimeForTraining: Double = 0.0
+    ///Таймер для интервалов
+    var timerForInterval = Timer()
     ///Хранит временной интервал (максимум 5999.99)
-    private var timeForRound: Double = 10.0
+    private var timeForRound: Double = 0.0
     ///Хранит начальное значение временного интервала из переменной  timeForRound (максимум 5999.99)
     private var tmpTimeForRound: Double = 0.0
     ///Хранит текущее значение временного интервала
@@ -59,7 +65,7 @@ class ViewControllerTrain: UIViewController {
     ///Текущее время раунда
     var currentTimeOfRound: Double = 00.00
     
-    var viewControllerOptionsTrain = ViewControllerOptionsTrain()
+    var viewControllerOptionsTrain = ViewControllerOptionsTraining()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,30 +80,43 @@ class ViewControllerTrain: UIViewController {
         self.time.font = UIFont.monospacedDigitSystemFont(
         ofSize: 70, weight: .regular)
         
-        tableOfTrain.delegate = self
-        tableOfTrain.dataSource = self
+        tableOfTraining.delegate = self
+        tableOfTraining.dataSource = self
         
-        tmpRoundsTrain = roundsTrain
-        countNumOfTrains = roundsTrain.count
+        tmpRoundsTrain = roundsTraining
+        countNumOfTrains = roundsTraining.count
         
         if let data = SaverLoader.load(for: "train") {
-            self.roundsTrainQQ = data
+            self.roundsTrainingQQ = data
             self.numOfRounds = data.count
-            tableOfTrain.reloadData()
+            tableOfTraining.reloadData()
         }
         
-        changeFontForTimeLabel()
+        changeFontAndValueForTimeLabel()
+        
+        
+        let form = DateFormatter()
+        form.dateFormat = "mm:ss:SS"
+        
+        var date = Date()
+        
+        var a = form.string(from: date)
+        var b = form.string(from: date - 60)
+        
+        print(a)
+        print(b)
+//        print("11", a.addingTimeInterval(9))
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        notificationCenter.addObserver(self, selector: #selector(getNotification), name: .train, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(getNotification), name: .training, object: nil)
     }
     
     ///Поиск в тренировке временного интервала
     ///- Возвращается первое попавшееся значение
     private func findTime() -> Double {
         
-        guard let tmpRoundsTrainQQ = roundsTrainQQ else { return 0.0 }
+        guard let tmpRoundsTrainQQ = roundsTrainingQQ else { return 0.0 }
         
         var tmpTime = 0.0
         
@@ -132,9 +151,9 @@ class ViewControllerTrain: UIViewController {
     
     ///Проверка типа интервала первого элемента. Возвращает словарь: в ключе тип интервала (time, exercise) и соответствующее значение
     ///- В блоке guard проверится наличие первого элемента в первом секторе
-    private func checkTypeInterval() -> [String: String] {
+    private func checkTypeInterval() -> [String: String]? {
         
-        guard let first = roundsTrainQQ?[0].first, let _ = roundsTrainQQ else { return ["finish" : "0"] }
+        guard let tmp = roundsTrainingQQ, let first = tmp[0].first  else { return nil }
         
         if first.contains(".") {
             return ["time" : first]
@@ -150,12 +169,12 @@ class ViewControllerTrain: UIViewController {
         if let train = item["train"] {
             let numOfRounds = Int(train[0][0]) ?? 0
             self.numOfRounds = numOfRounds
-            self.roundsTrainQQ = Array(repeating: train[1], count: self.numOfRounds)
+            self.roundsTrainingQQ = Array(repeating: train[1], count: self.numOfRounds)
         }
-        self.tableOfTrain.reloadData()
-        changeFontForTimeLabel()
+        self.tableOfTraining.reloadData()
+        changeFontAndValueForTimeLabel()
         
-        SaverLoader.save(value: self.roundsTrainQQ!, for: "train")
+        SaverLoader.save(value: self.roundsTrainingQQ!, for: "train")
     }
     
     @IBAction func startAction(_ sender: UIButton) {
@@ -165,24 +184,26 @@ class ViewControllerTrain: UIViewController {
         numberOfRep.isHidden = false
         optionsBarItem.isEnabled = false
         
-        if let _ = checkTypeInterval()["time"] {
+        timerForTraining = countTimeForTraining()
+        
+        if let _ = checkTypeInterval()?["time"] {
             pause.isHidden = false
-            timerForTrain = timer()
-        } else if let _ = checkTypeInterval()["exercise"] {
+            timerForInterval = timer()
+        } else if let _ = checkTypeInterval()?["exercise"] {
             pause.isHidden = true
             nextButton.isHidden = false
         }
     }
     
-    ///У лейбла таймера выставит соотвествующее значение
-    private func changeFontForTimeLabel() {
-        if let time = checkTypeInterval()["time"] {
+    ///У лейбла таймера выставит соотвествующее значение, изменит размер шрифта для интервала повторений
+    private func changeFontAndValueForTimeLabel() {
+        if let time = checkTypeInterval()?["time"] {
             let tmp = Double(time) ?? 0.0
             timeForRound = tmp
             tmpTimeForRound = tmp
             self.time.font = UIFont.monospacedDigitSystemFont(ofSize: 70, weight: .regular)
             self.time.text = TimeFormatter.formatter(time: tmp)
-        } else if let exercise = checkTypeInterval()["exercise"] {
+        } else if let exercise = checkTypeInterval()?["exercise"] {
             self.time.font = UIFont.systemFont(ofSize: 48, weight: UIFont.Weight.regular)
             self.time.textAlignment = .justified
             self.time.text = "Повторов: \(exercise)"
@@ -191,24 +212,25 @@ class ViewControllerTrain: UIViewController {
     
     @IBAction func nextAction(_ sender: UIButton) {
         
-        roundsTrainQQ?[0].remove(at: 0)
-        tableOfTrain.reloadData()
+        roundsTrainingQQ?[0].remove(at: 0)
+        tableOfTraining.reloadData()
         
-        if roundsTrainQQ?[0].count == 0 {
-            roundsTrainQQ?.remove(at: 0)
-            tableOfTrain.reloadData()
+        if roundsTrainingQQ?[0].count == 0 {
+            roundsTrainingQQ?.remove(at: 0)
+            tableOfTraining.reloadData()
         }
         
-        if roundsTrainQQ?.count == 0 {
+        if roundsTrainingQQ?.count == 0 {
             stopAction(stop)
             self.time.text = "Допрыгался!"
-        } else if let time = checkTypeInterval()["time"] {
+            alertFinishTraining()
+        } else if let time = checkTypeInterval()?["time"] {
             nextButton.isHidden = true
             pause.isHidden = false
             timeForRound = Double(time) ?? 0.0
-            timerForTrain = timer()
+            timerForInterval = timer()
             
-        } else if let exercise = checkTypeInterval()["exercise"] {
+        } else if let exercise = checkTypeInterval()?["exercise"] {
             nextButton.isHidden = false
             self.time.text = "Повторов: \(exercise)"
         }
@@ -222,8 +244,10 @@ class ViewControllerTrain: UIViewController {
         continueLabel.isHidden = false
         
         currentTimeOfRound = timeForRound
+        tmpTimeForTraining = timeForTraining
         
-        timerForTrain.invalidate()
+        timerForTraining.invalidate()
+        timerForInterval.invalidate()
     }
     
     @IBAction func continueAction(_ sender: UIButton) {
@@ -236,15 +260,19 @@ class ViewControllerTrain: UIViewController {
         if timeForRound != tmpTimeForRound {
             timeForRound = currentTimeOfRound
 
-            timerForTrain = timer()
+            timerForInterval = timer()
 
             currentTimeOfRound = 00.00
         }
+        
+        timeForTraining = tmpTimeForTraining
+        timerForTraining = countTimeForTraining()
     }
     
     @IBAction func stopAction(_ sender: UIButton) {
-        timerForTrain.invalidate()
-        
+        timerForInterval.invalidate()
+        timerForTraining.invalidate()
+
         pause.isHidden = true
         stop.isHidden = true
         start.isHidden = false
@@ -256,6 +284,10 @@ class ViewControllerTrain: UIViewController {
         
         timeForRound = tmpTimeForRound
         time.text = TimeFormatter.formatter(time: timeForRound)
+        
+        alertFinishTraining()
+        
+        print("stop")
     }
     
     ///Подсчёт повторений. Здесь погрешность в том, если будут выполняться какие-то быстрые двжения, требующие подсчёта (прыжки на скакалке, выбросы грифа, полуприседы). Обработка нажатия на кнопку не успевает. Подсчёт работает и во время отдыха
@@ -264,6 +296,27 @@ class ViewControllerTrain: UIViewController {
         numberOfRep.text = "\(countRep)"
         
         changeViewBackground()
+    }
+    
+    ///Алерт, который появится по окончанию тренировки или после нажатия на "Стоп"
+    ///- Отобразит время затраченное на тренировку
+    private func alertFinishTraining() {
+        let tmpTime = TimeFormatter.formatter(time: timeForTraining)
+        
+        let alert = UIAlertController(title: "Тренировка окончена", message: "затраченное время \(tmpTime)", preferredStyle: UIAlertController.Style.alert)
+        
+        let alertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        
+        alert.addAction(alertAction)
+        present(alert, animated: true, completion: nil)
+        
+        if let data = SaverLoader.load(for: "train") {
+            self.roundsTrainingQQ = data
+            self.numOfRounds = data.count
+            tableOfTraining.reloadData()
+        }
+        
+        timeForTraining = 0.0
     }
     
     ///Анимация, которая меняет цвет фона, чтобы пользователь мог увидеть, что кнопка "Повтор" была нажата
@@ -276,34 +329,49 @@ class ViewControllerTrain: UIViewController {
         }
     }
     
+    ///Для отсчёта времени интервала
+    private func timer() -> Timer {
+        Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRound), userInfo: nil, repeats: true)
+    }
+    
+    ///Для отсчёта времени всей тренировки
+    private func countTimeForTraining() -> Timer {
+        Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForTraining), userInfo: nil, repeats: true)
+    }
+    
     @objc
     private func timerUpdateForRound() {
         timeForRound -= 00.01
         if timeForRound <= 0.0 {
-            timerForTrain.invalidate()
+            timerForInterval.invalidate()
             
-            roundsTrainQQ?[0].remove(at: 0)
-            tableOfTrain.reloadData()
+            roundsTrainingQQ?[0].remove(at: 0)
+            tableOfTraining.reloadData()
             
-            if let time = checkTypeInterval()["time"] {
+            if roundsTrainingQQ?[0].count == 0 {
+                roundsTrainingQQ?.remove(at: 0)
+                tableOfTraining.reloadData()
+            }
+            
+            if roundsTrainingQQ?.count == 0 {
+                print("!!!!!", timeForRound)
+                stopAction(stop)
+                self.time.text = "Допрыгался!"
+            }
+            
+            if let time = checkTypeInterval()?["time"] {
                 pause.isHidden = false
                 nextButton.isHidden = true
                 timeForRound = Double(time) ?? 0.0
-                timerForTrain = timer()
-            } else if let exercise = checkTypeInterval()["exercise"] {
+                timerForInterval = timer()
+            } else if let exercise = checkTypeInterval()?["exercise"] {
                 pause.isHidden = true
                 nextButton.isHidden = false
                 self.time.text = "Повторов: \(exercise)"
-            }
-            
-//            if roundsTrainQQ?[0].count == 0 {
-//                roundsTrainQQ?.remove(at: 0)
-//                tableOfTrain.reloadData()
-//            }
-            
-            if roundsTrainQQ?.count == 0 {
-                stopAction(stop)
-                self.time.text = "Допрыгался!"
+            } else {
+                roundsTrainingQQ?.remove(at: 0)
+                tableOfTraining.reloadData()
+                print("gggggg")
             }
 
         } else {
@@ -311,9 +379,9 @@ class ViewControllerTrain: UIViewController {
         }
     }
     
-    ///Для создания таймера для отсчёта времени
-    private func timer() -> Timer {
-        Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRound), userInfo: nil, repeats: true)
+    @objc
+    private func timerUpdateForTraining() {
+        timeForTraining += 00.01
     }
 }
 
@@ -321,14 +389,14 @@ extension ViewControllerTrain: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         
-        guard let tmpRoundsTrainQQ = roundsTrainQQ else { return 0 }
+        guard let tmpRoundsTrainQQ = roundsTrainingQQ else { return 0 }
         
         return tmpRoundsTrainQQ.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        guard let tmpRoundsTrainQQ = roundsTrainQQ else { return 0 }
+        guard let tmpRoundsTrainQQ = roundsTrainingQQ else { return 0 }
         
         return tmpRoundsTrainQQ[section].count
     }
@@ -336,7 +404,7 @@ extension ViewControllerTrain: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellTrain", for: indexPath)
 
-        guard let tmpRoundsTrainQQ = roundsTrainQQ else { return UITableViewCell() }
+        guard let tmpRoundsTrainQQ = roundsTrainingQQ else { return UITableViewCell() }
         
         let tmpInterval = tmpRoundsTrainQQ[indexPath.section][indexPath.row]
         
@@ -354,7 +422,7 @@ extension ViewControllerTrain: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        guard let tmpRoundsTrainQQ = roundsTrainQQ else { return "" }
+        guard let tmpRoundsTrainQQ = roundsTrainingQQ else { return "" }
         let tmpNumOfRounds = numOfRounds - tmpRoundsTrainQQ.count + section + 1
         
         return "Раунд \(tmpNumOfRounds)"

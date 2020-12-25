@@ -810,7 +810,7 @@
                         <outlet property="rep" destination="ySp-sD-CCo" id="2zS-oP-yWb"/>
                         <outlet property="start" destination="QBY-dt-sSL" id="FsE-bS-y1q"/>
                         <outlet property="stop" destination="ycl-NX-dlp" id="ZHS-Jh-Sa1"/>
-                        <outlet property="tableOfTrain" destination="Tq3-KG-m9e" id="QLf-ox-pkc"/>
+                        <outlet property="tableOfTraining" destination="Tq3-KG-m9e" id="QLf-ox-pkc"/>
                         <outlet property="time" destination="c0t-Xc-fw3" id="WOL-AK-Cu6"/>
                     </connections>
                 </viewController>
@@ -837,10 +837,10 @@
             </objects>
             <point key="canvasLocation" x="941" y="1254"/>
         </scene>
-        <!--View Controller Options Train-->
+        <!--View Controller Options Training-->
         <scene sceneID="KAh-F1-S3K">
             <objects>
-                <viewController id="wTd-Pp-6gV" customClass="ViewControllerOptionsTrain" customModule="Timer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="wTd-Pp-6gV" customClass="ViewControllerOptionsTraining" customModule="Timer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Y7U-D0-XvN">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -849,7 +849,7 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="613.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CellOptions" id="rLZ-8d-nTp" customClass="CellOptionsTrain" customModule="Timer" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CellOptions" id="rLZ-8d-nTp" customClass="CellOptionsTraining" customModule="Timer" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="77"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="rLZ-8d-nTp" id="XKe-Ii-d65">
@@ -945,7 +945,7 @@
                     <connections>
                         <outlet property="numberOfRounds" destination="Nda-09-c0O" id="ze3-tH-edS"/>
                         <outlet property="stepperNumOfRounds" destination="ueT-nR-gXm" id="dtN-8Z-Yc9"/>
-                        <outlet property="tableOfTrain" destination="Xez-zL-kKf" id="UZs-5h-j4p"/>
+                        <outlet property="tableOfTraining" destination="Xez-zL-kKf" id="UZs-5h-j4p"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xBV-TB-Qvo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

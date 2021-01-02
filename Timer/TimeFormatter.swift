@@ -22,4 +22,16 @@ class TimeFormatter {
         
         return "\(mm):\(ss):\(mls)"
     }
+    
+    static func formatterQ(interval: Double) -> String {
+        let minutes = Int(interval) / 60 % 60
+        let seconds = Int(interval) % 60
+        
+        let numberString = String(interval)
+        let numberComponent = numberString.components(separatedBy :".")
+        let ms = numberComponent [1]
+        
+        return "\(String(format: "%02d", minutes)):\(String(format: "%02d", seconds)):\(ms.prefix(2))"
+        
+    }
 }

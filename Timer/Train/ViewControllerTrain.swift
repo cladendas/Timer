@@ -105,7 +105,6 @@ class ViewControllerTrain: UIViewController {
         
         print(a)
         print(b)
-//        print("11", a.addingTimeInterval(9))
     }
     
     override func viewWillAppear(_ animated: Bool) {

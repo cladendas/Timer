@@ -14,9 +14,12 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
     var timer = Timer()
     
     ///Текущее время
-    var currentTime: Double = 00.00
-    ///Переменная для фиксации значения текущего времени
-    var tmpTime: Double = 00.00
+    var currentDate = Date()
+    ///Временной интервал
+    ///- Используется при расчётах времени
+    var timeInterval = 0.0
+    ///Переменная для фиксации текущего значения временного интервала
+    var tmpTimeInterval: Double = 00.00
 
     @IBOutlet var timeLabel: UILabel!
     @IBOutlet var start: UIButton!
@@ -46,21 +49,23 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
         start.isHidden = true
         stop.isHidden = true
         
+        currentDate = Date()
+        
         timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdate), userInfo: Date(), repeats: true)
         
         //Позволяет обрабатывать события в интерфейсе. Здесь: чтобы скроллинг таблицы не останавливает таймер
         RunLoop.main.add(timer, forMode: RunLoop.Mode.common)
     }
     
-    //Когда свайпишь таблицу с кругами, то отсчёт времени останавливается, а когда отпускаешь - время идёд дальше, а таблица при нажатии на кнопку "Круг" не пролистывается к последнему значению
+    //Когда свайпишь таблицу с кругами, то отсчёт времени останавливается, а когда отпускаешь - время идёт дальше, а таблица при нажатии на кнопку "Круг" не пролистывается к последнему значению
     @IBAction func roundAction(_ sender: UIButton) {
-        let round = TimeFormatter.formatter(time: currentTime)
+        let round = timeLabel.text ?? "00:00:00"
         rounds.insert(round, at: 0)
         tableViewRounds.reloadData()
         
-        currentTime = tmpTime
+        currentDate = Date()
+        timeInterval = 0.0
         timerUpdate()
-        tmpTime = 00.00
     }
     
     @IBAction func pauseAction(_ sender: UIButton) {
@@ -68,10 +73,8 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
         pause.isHidden = true
         stop.isHidden = false
         continueLabel.isHidden = false
-        tmpTime = currentTime
+        tmpTimeInterval = timeInterval
         timer.invalidate()
-        
-        timeLabel.text = TimeFormatter.formatter(time: currentTime)
     }
     
     @IBAction func continueAction(_ sender: UIButton) {
@@ -79,9 +82,7 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
         pause.isHidden = true
         stop.isHidden = true
         continueLabel.isHidden = true
-        currentTime = tmpTime
         timerUpdate()
-        tmpTime = 00.00
     }
     
     @IBAction func stopAction(_ sender: Any) {
@@ -91,8 +92,7 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
         stop.isHidden = true
         
         timer.invalidate()
-        currentTime = 00.00
-        tmpTime = 00.00
+        tmpTimeInterval = 00.00
         
         timeLabel.text = "00:00:00"
         rounds = []
@@ -101,8 +101,8 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
     
     @objc
     func timerUpdate() {
-        currentTime += 00.01
-        timeLabel.text = TimeFormatter.formatter(time: currentTime)
+        timeInterval = -currentDate.timeIntervalSinceNow + tmpTimeInterval
+        timeLabel.text = TimeFormatter.formatterQ(interval: timeInterval)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

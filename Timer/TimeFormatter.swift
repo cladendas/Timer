@@ -27,11 +27,10 @@ class TimeFormatter {
         let minutes = Int(interval) / 60 % 60
         let seconds = Int(interval) % 60
         
-        let numberString = String(interval)
+        let numberString = String(interval + 0.00000001)
         let numberComponent = numberString.components(separatedBy :".")
-        let ms = numberComponent [1]
+        let ms = numberComponent[1]
         
         return "\(String(format: "%02d", minutes)):\(String(format: "%02d", seconds)):\(ms.prefix(2))"
-        
     }
 }

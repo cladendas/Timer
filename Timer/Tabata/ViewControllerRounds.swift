@@ -117,7 +117,7 @@ extension ViewControllerRounds: UITableViewDelegate, UITableViewDataSource {
         let ff = formatInfoRound(round: rounds[indexPath.row][0], timeForRound: rounds[indexPath.row][1], timeForRes: rounds[indexPath.row][2])
         
         clouserNumOfRounds?(rounds[indexPath.row][0] as! Int)
-        clouserTimeForRound?(rounds[indexPath.row][1] as! Double)
+        clouserTimeForRound?(Double(rounds[indexPath.row][1]) as! Double)
         clouserTimeForRes?(rounds[indexPath.row][2] as! Double)
         
         numberOfRounds.text = "Кол-во раундов: \(ff[0])"

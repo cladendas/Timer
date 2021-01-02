@@ -24,8 +24,13 @@ class ViewControllerTimer: UIViewController {
 
     @IBOutlet var continueLabel: UIButton!
     
+    ///Время старта
+    ///- От него расчитываются интервалы
+    var dateStart = Date()
+    
     ///Таймер для раунда
     private var timerForRound = Timer()
+    private var timerForRoundQ = Timer()
     ///Таймер для отдыха
     private var timerForRes = Timer()
     private var viewControllerRounds = ViewControllerRounds()
@@ -104,6 +109,8 @@ class ViewControllerTimer: UIViewController {
         numberRep.isHidden = false
         optionsBarItem.isEnabled = false
         
+        dateStart = Date()
+        
         timerForRound = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRound), userInfo: nil, repeats: true)
     }
         
@@ -159,8 +166,8 @@ class ViewControllerTimer: UIViewController {
         timeForRound = tmpTimeForRound
         timeForRes = tmpTimeForRes
         countOfRounds = tmpCountOfRounds
-        timeLabel.text = TimeFormatter.formatter(time: timeForRound)
-        timeLabelForRes.text = TimeFormatter.formatter(time: timeForRes)
+        timeLabel.text = TimeFormatter.formatterQ(interval: timeForRound)
+        timeLabelForRes.text = TimeFormatter.formatterQ(interval: timeForRes)
         numberOfRounds.text = "Раундов \(countOfRounds)/\(countOfRounds)"
     }
     
@@ -183,6 +190,7 @@ class ViewControllerTimer: UIViewController {
     }
     
     private func startRes() {
+        dateStart = Date()
         if countOfRounds > 0 {
             timerForRes = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRes), userInfo: nil, repeats: true)
         } else {
@@ -192,31 +200,27 @@ class ViewControllerTimer: UIViewController {
     
     @objc
     private func timerUpdateForRound() {
-        timeForRound -= 00.01
-        if timeForRound <= 0.0 && countOfRounds > 0 {
+        if -dateStart.timeIntervalSinceNow >= timeForRound {
             timerForRound.invalidate()
             //чтобы таймер стратовал с заданного значения
             timeForRound = tmpTimeForRound
             countOfRounds -= 1
-            
             numberOfRounds.text = "Раундов \(countOfRounds)/\(tmpCountOfRounds)"
-            
             startRes()
         } else {
-            timeLabel.text = TimeFormatter.formatter(time: timeForRound)
+            timeLabel.text = TimeFormatter.formatterQ(interval: timeForRound + dateStart.timeIntervalSinceNow)
         }
     }
     
     @objc
     private func timerUpdateForRes() {
-        timeForRes -= 00.01
-        if timeForRes <= 0.0 {
+        if -dateStart.timeIntervalSinceNow >= timeForRes {
             timerForRes.invalidate()
             //чтобы таймер стартовал с заданного значения
             timeForRes = tmpTimeForRes
             startAction(start)
         } else {
-            timeLabelForRes.text = TimeFormatter.formatter(time: timeForRes)
+            timeLabelForRes.text = TimeFormatter.formatterQ(interval: timeForRes + dateStart.timeIntervalSinceNow)
         }
     }
 }

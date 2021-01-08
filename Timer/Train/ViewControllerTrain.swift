@@ -34,8 +34,12 @@ class ViewControllerTrain: UIViewController {
     
     var roundsTraining: [Double] = [2.0, 24.0, 13]
     
+    ///Время старта тренировки
     var dateTraining = Date()
+    ///Время старта интервала
     var dateStart = Date()
+    ///Время нажатия на кнопку пауза
+    var datePause = Date()
     ///Интервалы
     var roundsTrainingQ = [[Double]]()
     var roundsQ = [[3.0], [4.0, 5.0, 6.0]]
@@ -50,8 +54,6 @@ class ViewControllerTrain: UIViewController {
     var countNumOfTrains = 0
     var countRep = 0
     
-    ///Таймер для всей тренировки
-    var timerForTraining = Timer()
     ///Хранит время, ушедшее на тренировку
     var timeForTraining: Double = 0.0
     ///Хранит время тренировки в случае паузы
@@ -171,7 +173,6 @@ class ViewControllerTrain: UIViewController {
     @IBAction func startAction(_ sender: UIButton) {
         if sw {
             dateTraining = Date()
-            
             sw = false
         }
         
@@ -182,8 +183,6 @@ class ViewControllerTrain: UIViewController {
         stop.isHidden = true
         numberOfRep.isHidden = false
         optionsBarItem.isEnabled = false
-        
-        timerForTraining = countTimeForTraining()
         
         if let _ = checkTypeInterval()?["time"] {
             pause.isHidden = false
@@ -236,19 +235,21 @@ class ViewControllerTrain: UIViewController {
     
     
     @IBAction func pauseAction(_ sender: UIButton) {
+        datePause = Date()
         pause.isHidden = true
         rep.isHidden = true
         stop.isHidden = false
         continueLabel.isHidden = false
         
-        currentTimeOfRound = timeForRound
-        tmpTimeForTraining = timeForTraining
-        
-        timerForTraining.invalidate()
         timerForInterval.invalidate()
+        
+        print(timeForRound)
+        timeForRound += dateStart.timeIntervalSinceNow
+        currentTimeOfRound = timeForRound
     }
     
     @IBAction func continueAction(_ sender: UIButton) {
+        dateTraining += datePause.timeIntervalSinceNow
         pause.isHidden = false
         rep.isHidden = false
         stop.isHidden = true
@@ -257,20 +258,13 @@ class ViewControllerTrain: UIViewController {
         
         if timeForRound != tmpTimeForRound {
             timeForRound = currentTimeOfRound
-
-            timerForInterval = timer()
-
+            startAction(start)
             currentTimeOfRound = 00.00
         }
-        
-        timeForTraining = tmpTimeForTraining
-        timerForTraining = countTimeForTraining()
     }
     
     @IBAction func stopAction(_ sender: UIButton) {
         timerForInterval.invalidate()
-        timerForTraining.invalidate()
-
         pause.isHidden = true
         stop.isHidden = true
         start.isHidden = false
@@ -312,8 +306,6 @@ class ViewControllerTrain: UIViewController {
             self.numOfRounds = data.count
             tableOfTraining.reloadData()
         }
-        
-        timeForTraining = 0.0
     }
     
     ///Анимация, которая меняет цвет фона, чтобы пользователь мог увидеть, что кнопка "Повтор" была нажата
@@ -329,11 +321,6 @@ class ViewControllerTrain: UIViewController {
     ///Для отсчёта времени интервала
     private func timer() -> Timer {
         Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRound), userInfo: nil, repeats: true)
-    }
-    
-    ///Для отсчёта времени всей тренировки
-    private func countTimeForTraining() -> Timer {
-        Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForTraining), userInfo: nil, repeats: true)
     }
     
     @objc
@@ -369,11 +356,6 @@ class ViewControllerTrain: UIViewController {
         } else {
             time.text = TimeFormatter.formatterQ(interval: timeForRound + dateStart.timeIntervalSinceNow)
         }
-    }
-    
-    @objc
-    private func timerUpdateForTraining() {
-        timeForTraining += 00.01
     }
 }
 

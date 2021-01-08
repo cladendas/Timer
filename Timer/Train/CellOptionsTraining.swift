@@ -30,6 +30,7 @@ class CellOptionsTraining: UITableViewCell {
     ///Колбэк для передачи данных из ячейки
     var clouserStepperValue: ((Any) -> Void)?
     
+    ///Выбор интервала: временной интервал (sender.selectedSegmentIndex == 0), интервал повторений (sender.selectedSegmentIndex == 1)
     @IBAction func segmentControlAction(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
             self.rep.isHidden = true
@@ -51,7 +52,7 @@ class CellOptionsTraining: UITableViewCell {
             clouserStepperValue?(intValue)
         }
     }
-    
+    ///Выставит значение у временного интервала (segmentControlTrain.selectedSegmentIndex == 0) или у интервала повторений (segmentControlTrain.selectedSegmentIndex == 1)
     @IBAction func stepperTimeAction(_ sender: UIStepper) {
         if segmentControlTrain.selectedSegmentIndex == 0 {
             let tmpValue = TimeFormatter.formatter(time: sender.value * 5)

@@ -31,41 +31,29 @@ class ViewControllerTrain: UIViewController {
     
     ///Хранит значения от наблюдателя CellOptionsTrain
     private var intervalQ = [String : String]()
-    
-    var roundsTraining: [Double] = [2.0, 24.0, 13]
-    
+
     ///Время старта тренировки
     var dateTraining = Date()
     ///Время старта интервала
     var dateStart = Date()
     ///Время нажатия на кнопку пауза
     var datePause = Date()
-    ///Интервалы
-    var roundsTrainingQ = [[Double]]()
-    var roundsQ = [[3.0], [4.0, 5.0, 6.0]]
-    ///Хранит в чистом виде данные из ViewControllerOptionsTrain: кол-во раундов, повторения и/или временные интервалы
-    var roundsQQ = [[Any]]()
-    ///Тренировка: временные интервалы и/или кол-во повторений
+    ///Тренировка: временные интервалы и/или кол-во повторений (не хранит кол-во раундов)
     var roundsTrainingQQ: [[String]]?
-    
-    var tmpRoundsTrain: [Double] = []
-    
+    ///Кол-во раундов
     var numOfRounds = 0
-    var countNumOfTrains = 0
+    ///Кол-во выполненных повторений
     var countRep = 0
-    
     ///Хранит время, ушедшее на тренировку
     var timeForTraining: Double = 0.0
     ///Хранит время тренировки в случае паузы
     var tmpTimeForTraining: Double = 0.0
     ///Таймер для интервалов
     var timerForInterval = Timer()
-    ///Хранит временной интервал (максимум 5999.99)
+    ///Хранит временной интервал
     private var timeForRound: Double = 0.0
-    ///Хранит начальное значение временного интервала из переменной  timeForRound (максимум 5999.99)
+    ///Хранит начальное значение временного интервала из переменной  timeForRound
     private var tmpTimeForRound: Double = 0.0
-    ///Хранит текущее значение временного интервала
-    var tmpTime: Double = 00.00
     ///Текущее время раунда
     var currentTimeOfRound: Double = 00.00
     
@@ -86,9 +74,6 @@ class ViewControllerTrain: UIViewController {
         
         tableOfTraining.delegate = self
         tableOfTraining.dataSource = self
-        
-        tmpRoundsTrain = roundsTraining
-        countNumOfTrains = roundsTraining.count
         
         if let data = SaverLoader.load(for: "train") {
             self.roundsTrainingQQ = data
@@ -126,19 +111,6 @@ class ViewControllerTrain: UIViewController {
     deinit {
         notificationCenter.removeObserver(self)
     }
-    
-//    func checkTimeOrExercise() -> String {
-//
-//        let dd = checkTypeInterval()
-//
-//        if dd.keys.contains("time") {
-//            return "time"
-//        } else if dd.keys.contains("exercise") {
-//            return "exercise"
-//        }
-//
-//        return "-1"
-//    }
     
     ///Проверка типа интервала первого элемента. Возвращает словарь: в ключе тип интервала (time, exercise) и соответствующее значение
     ///- В блоке guard проверится наличие первого элемента в первом секторе

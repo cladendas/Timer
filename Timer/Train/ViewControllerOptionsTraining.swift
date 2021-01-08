@@ -14,6 +14,7 @@ extension NSNotification.Name {
     static let tmp = NSNotification.Name.init("tmp")
 }
 
+///Вьюконтроллер настроек тренировки
 class ViewControllerOptionsTraining: UIViewController {
     
     @IBOutlet var tableOfTraining: UITableView!
@@ -99,13 +100,12 @@ extension ViewControllerOptionsTraining: UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        var tt = 0
-        
+        var tmpCount = 0
         if training.indices.contains(1) {
-            tt = training[1].count
+            tmpCount = training[1].count
         }
         
-        return tt
+        return tmpCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -115,7 +115,7 @@ extension ViewControllerOptionsTraining: UITableViewDelegate, UITableViewDataSou
             cell.time.isHidden = false
             cell.rep.isHidden = true
             cell.segmentControlTrain.selectedSegmentIndex = 0
-            //Нужно делить на 5, т.к. stepperTime возвращает данные умноженные на 5
+            //Нужно делить на 5, т.к. stepperTimeAction возвращает данные умноженные на 5
             cell.stepperTime.value = tmpDouble / 5
             cell.time.text = "Интервал \(TimeFormatter.formatter(time: tmpDouble))"
             
@@ -147,11 +147,6 @@ extension ViewControllerOptionsTraining: UITableViewDelegate, UITableViewDataSou
                 self.notificationCenter.post(name: .training, object: self, userInfo: train)
                 SaverLoader.save(value: self.training, for: "trainOptions")
             }
-            
-//            let train = ["train" : self.train]
-//            self.notificationCenter.post(name: .train, object: self, userInfo: train)
-//            SaverLoader.save(value: self.train, for: "trainOptions")
-            
             return cell
         }
 

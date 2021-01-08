@@ -115,7 +115,8 @@ extension ViewControllerOptionsTraining: UITableViewDelegate, UITableViewDataSou
             cell.time.isHidden = false
             cell.rep.isHidden = true
             cell.segmentControlTrain.selectedSegmentIndex = 0
-            cell.stepperTime.value = tmpDouble
+            //Нужно делить на 5, т.к. stepperTime возвращает данные умноженные на 5
+            cell.stepperTime.value = tmpDouble / 5
             cell.time.text = "Интервал \(TimeFormatter.formatter(time: tmpDouble))"
             
             cell.clouserStepperValue = { item in

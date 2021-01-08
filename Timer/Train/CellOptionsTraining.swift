@@ -53,7 +53,6 @@ class CellOptionsTraining: UITableViewCell {
     }
     
     @IBAction func stepperTimeAction(_ sender: UIStepper) {
-        
         if segmentControlTrain.selectedSegmentIndex == 0 {
             let tmpValue = TimeFormatter.formatter(time: sender.value * 5)
             let tmpLabelText = leadingTimeLabel + tmpValue

@@ -34,6 +34,8 @@ class ViewControllerTrain: UIViewController {
     
     var roundsTraining: [Double] = [2.0, 24.0, 13]
     
+    var dateTraining = Date()
+    var dateStart = Date()
     ///Интервалы
     var roundsTrainingQ = [[Double]]()
     var roundsQ = [[3.0], [4.0, 5.0, 6.0]]
@@ -93,18 +95,6 @@ class ViewControllerTrain: UIViewController {
         }
         
         changeFontAndValueForTimeLabel()
-        
-        
-        let form = DateFormatter()
-        form.dateFormat = "mm:ss:SS"
-        
-        var date = Date()
-        
-        var a = form.string(from: date)
-        var b = form.string(from: date - 60)
-        
-        print(a)
-        print(b)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -176,7 +166,17 @@ class ViewControllerTrain: UIViewController {
         SaverLoader.save(value: self.roundsTrainingQQ!, for: "train")
     }
     
+    var sw = true
+    
     @IBAction func startAction(_ sender: UIButton) {
+        if sw {
+            dateTraining = Date()
+            
+            sw = false
+        }
+        
+        dateStart = Date()
+        
         rep.isHidden = false
         start.isHidden = true
         stop.isHidden = true
@@ -209,6 +209,7 @@ class ViewControllerTrain: UIViewController {
         }
     }
     
+    ///Указанный интервал повторений выполнен
     @IBAction func nextAction(_ sender: UIButton) {
         
         roundsTrainingQQ?[0].remove(at: 0)
@@ -222,13 +223,11 @@ class ViewControllerTrain: UIViewController {
         if roundsTrainingQQ?.count == 0 {
             stopAction(stop)
             self.time.text = "Допрыгался!"
-            alertFinishTraining()
         } else if let time = checkTypeInterval()?["time"] {
             nextButton.isHidden = true
             pause.isHidden = false
             timeForRound = Double(time) ?? 0.0
-            timerForInterval = timer()
-            
+            startAction(start)
         } else if let exercise = checkTypeInterval()?["exercise"] {
             nextButton.isHidden = false
             self.time.text = "Повторов: \(exercise)"
@@ -285,6 +284,7 @@ class ViewControllerTrain: UIViewController {
         time.text = TimeFormatter.formatter(time: timeForRound)
         
         alertFinishTraining()
+        sw = true
         
         print("stop")
     }
@@ -300,7 +300,7 @@ class ViewControllerTrain: UIViewController {
     ///Алерт, который появится по окончанию тренировки или после нажатия на "Стоп"
     ///- Отобразит время затраченное на тренировку
     private func alertFinishTraining() {
-        let tmpTime = TimeFormatter.formatter(time: timeForTraining)
+        let tmpTime = TimeFormatter.formatterQ(interval: -dateTraining.timeIntervalSinceNow)
         
         let alert = UIAlertController(title: "Тренировка окончена", message: "затраченное время \(tmpTime)", preferredStyle: UIAlertController.Style.alert)
         
@@ -340,41 +340,36 @@ class ViewControllerTrain: UIViewController {
     
     @objc
     private func timerUpdateForRound() {
-        timeForRound -= 00.01
-        if timeForRound <= 0.0 {
+        if -dateStart.timeIntervalSinceNow >= timeForRound {
             timerForInterval.invalidate()
-            
+
+            //Удаление истёкшего интервала
             roundsTrainingQQ?[0].remove(at: 0)
             tableOfTraining.reloadData()
-            
+
+            //Удаление пустого массива
             if roundsTrainingQQ?[0].count == 0 {
                 roundsTrainingQQ?.remove(at: 0)
                 tableOfTraining.reloadData()
             }
-            
+
+            //Завершени тренировки, если не осталось интервалов
             if roundsTrainingQQ?.count == 0 {
-                print("!!!!!", timeForRound)
                 stopAction(stop)
                 self.time.text = "Допрыгался!"
-            }
-            
-            if let time = checkTypeInterval()?["time"] {
+            } else if let time = checkTypeInterval()?["time"] {
                 pause.isHidden = false
                 nextButton.isHidden = true
                 timeForRound = Double(time) ?? 0.0
-                timerForInterval = timer()
+                startAction(start)
             } else if let exercise = checkTypeInterval()?["exercise"] {
                 pause.isHidden = true
                 nextButton.isHidden = false
                 self.time.text = "Повторов: \(exercise)"
-            } else {
-                roundsTrainingQQ?.remove(at: 0)
-                tableOfTraining.reloadData()
-                print("gggggg")
+                startAction(start)
             }
-
         } else {
-            time.text = TimeFormatter.formatter(time: timeForRound)
+            time.text = TimeFormatter.formatterQ(interval: timeForRound + dateStart.timeIntervalSinceNow)
         }
     }
     

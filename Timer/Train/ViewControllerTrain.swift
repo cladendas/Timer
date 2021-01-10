@@ -80,8 +80,13 @@ class ViewControllerTrain: UIViewController {
             self.numOfRounds = data.count
             tableOfTraining.reloadData()
         }
-    
-        let _ = checkTypeInterval()
+        
+        if let time = checkTypeInterval()?["time"] {
+            let ff = Double(time) ?? 0.0
+            self.time.text = TimeFormatter.formatterQ(interval: ff)
+        } else if let exercise = checkTypeInterval()?["exercise"] {
+            self.time.text = "Повторов: \(exercise)"
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -113,7 +118,8 @@ class ViewControllerTrain: UIViewController {
     private func checkTypeInterval() -> [String: String]? {
         
         guard let tmp = roundsTrainingQQ, let first = tmp[0].first  else {
-            print("здесь")
+            self.time.font = UIFont.systemFont(ofSize: 48, weight: UIFont.Weight.regular)
+            self.time.textAlignment = .justified
             return nil }
         
         if first.contains(".") {
@@ -184,7 +190,6 @@ class ViewControllerTrain: UIViewController {
         if roundsTrainingQQ?.count == 0 {
             roundsTrainingQQ = nil
             stopAction(stop)
-            self.time.text = "Допрыгался!"
         } else if let time = checkTypeInterval()?["time"] {
             nextButton.isHidden = true
             pause.isHidden = false
@@ -294,8 +299,8 @@ class ViewControllerTrain: UIViewController {
             //Завершени тренировки, если не осталось интервалов
             if roundsTrainingQQ?.count == 0 {
                 roundsTrainingQQ = nil
+                let _ = checkTypeInterval()
                 stopAction(stop)
-                self.time.text = "1Допрыгался!"
             } else if let time = checkTypeInterval()?["time"] {
                 pause.isHidden = false
                 nextButton.isHidden = true

@@ -80,8 +80,8 @@ class ViewControllerTrain: UIViewController {
             self.numOfRounds = data.count
             tableOfTraining.reloadData()
         }
-        
-        changeFontAndValueForTimeLabel()
+    
+        let _ = checkTypeInterval()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -112,11 +112,16 @@ class ViewControllerTrain: UIViewController {
     ///- В блоке guard проверится наличие первого элемента в первом секторе
     private func checkTypeInterval() -> [String: String]? {
         
-        guard let tmp = roundsTrainingQQ, let first = tmp[0].first  else { return nil }
+        guard let tmp = roundsTrainingQQ, let first = tmp[0].first  else {
+            print("здесь")
+            return nil }
         
         if first.contains(".") {
+            self.time.font = UIFont.monospacedDigitSystemFont(ofSize: 70, weight: .regular)
             return ["time" : first]
         } else {
+            self.time.font = UIFont.systemFont(ofSize: 48, weight: UIFont.Weight.regular)
+            self.time.textAlignment = .justified
             return ["exercise" : first]
         }
     }
@@ -131,7 +136,7 @@ class ViewControllerTrain: UIViewController {
             self.roundsTrainingQQ = Array(repeating: train[1], count: self.numOfRounds)
         }
         self.tableOfTraining.reloadData()
-        changeFontAndValueForTimeLabel()
+        let _ = checkTypeInterval()
         
         SaverLoader.save(value: self.roundsTrainingQQ!, for: "train")
     }
@@ -165,24 +170,6 @@ class ViewControllerTrain: UIViewController {
         }
     }
     
-    ///У лейбла таймера выставит соотвествующее значение, изменит размер шрифта для интервала повторений
-    private func changeFontAndValueForTimeLabel() {
-        if let _ = checkTypeInterval()?["time"] {
-//            let tmp = Double(time) ?? 0.0
-//            timeForRound = tmp
-//            tmpTimeForRound = tmp
-            self.time.font = UIFont.monospacedDigitSystemFont(ofSize: 70, weight: .regular)
-//            self.time.text = TimeFormatter.formatter(time: tmp)
-        } else if let _ = checkTypeInterval()?["exercise"] {
-            self.time.font = UIFont.systemFont(ofSize: 48, weight: UIFont.Weight.regular)
-            self.time.textAlignment = .justified
-//            self.time.text = "Повторов: \(exercise)"
-        } else {
-            self.time.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.regular)
-            self.time.textAlignment = .justified
-        }
-    }
-    
     ///Указанный интервал повторений выполнен
     @IBAction func nextAction(_ sender: UIButton) {
         
@@ -195,18 +182,16 @@ class ViewControllerTrain: UIViewController {
         }
         
         if roundsTrainingQQ?.count == 0 {
+            roundsTrainingQQ = nil
             stopAction(stop)
-            changeFontAndValueForTimeLabel()
             self.time.text = "Допрыгался!"
         } else if let time = checkTypeInterval()?["time"] {
             nextButton.isHidden = true
             pause.isHidden = false
             timeForRound = Double(time) ?? 0.0
-            changeFontAndValueForTimeLabel()
             startAction(start)
         } else if let exercise = checkTypeInterval()?["exercise"] {
             nextButton.isHidden = false
-            changeFontAndValueForTimeLabel()
             self.time.text = "Повторов: \(exercise)"
         }
     }
@@ -249,11 +234,10 @@ class ViewControllerTrain: UIViewController {
         continueLabel.isHidden = true
         optionsBarItem.isEnabled = true
         
-        timeForRound = tmpTimeForRound
-        time.text = TimeFormatter.formatter(time: timeForRound)
-        
         alertFinishTraining()
         sw = true
+        
+        viewDidLoad()
     }
     
     ///Подсчёт повторений. Здесь погрешность в том, если будут выполняться какие-то быстрые двжения, требующие подсчёта (прыжки на скакалке, выбросы грифа, полуприседы). Обработка нажатия на кнопку не успевает. Подсчёт работает и во время отдыха
@@ -275,12 +259,6 @@ class ViewControllerTrain: UIViewController {
         
         alert.addAction(alertAction)
         present(alert, animated: true, completion: nil)
-        
-        if let data = SaverLoader.load(for: "train") {
-            self.roundsTrainingQQ = data
-            self.numOfRounds = data.count
-            tableOfTraining.reloadData()
-        }
     }
     
     ///Анимация, которая меняет цвет фона, чтобы пользователь мог увидеть, что кнопка "Повтор" была нажата
@@ -315,19 +293,17 @@ class ViewControllerTrain: UIViewController {
 
             //Завершени тренировки, если не осталось интервалов
             if roundsTrainingQQ?.count == 0 {
+                roundsTrainingQQ = nil
                 stopAction(stop)
-                changeFontAndValueForTimeLabel()
-                self.time.text = "Допрыгался!"
+                self.time.text = "1Допрыгался!"
             } else if let time = checkTypeInterval()?["time"] {
                 pause.isHidden = false
                 nextButton.isHidden = true
                 timeForRound = Double(time) ?? 0.0
-                changeFontAndValueForTimeLabel()
                 startAction(start)
             } else if let exercise = checkTypeInterval()?["exercise"] {
                 pause.isHidden = true
                 nextButton.isHidden = false
-                changeFontAndValueForTimeLabel()
                 self.time.text = "Повторов: \(exercise)"
                 startAction(start)
             }

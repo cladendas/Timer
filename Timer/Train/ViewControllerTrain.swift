@@ -91,11 +91,8 @@ class ViewControllerTrain: UIViewController {
     ///Поиск в тренировке временного интервала
     ///- Возвращается первое попавшееся значение
     private func findTime() -> Double {
-        
         guard let tmpRoundsTrainQQ = roundsTrainingQQ else { return 0.0 }
-        
         var tmpTime = 0.0
-        
         for section in tmpRoundsTrainQQ {
             for item in section {
                 if item.contains(".") {
@@ -104,7 +101,6 @@ class ViewControllerTrain: UIViewController {
                 }
             }
         }
-        
         return tmpTime
     }
     
@@ -148,16 +144,20 @@ class ViewControllerTrain: UIViewController {
             sw = false
         }
         
-        dateStart = Date()
-        
         rep.isHidden = false
         start.isHidden = true
         stop.isHidden = true
         numberOfRep.isHidden = false
         optionsBarItem.isEnabled = false
         
-        if let _ = checkTypeInterval()?["time"] {
+        if let time = checkTypeInterval()?["time"] {
+            dateStart = Date()
             pause.isHidden = false
+            
+            let tmp = Double(time) ?? 0.0
+            timeForRound = tmp
+            tmpTimeForRound = tmp
+            
             timerForInterval = timer()
         } else if let _ = checkTypeInterval()?["exercise"] {
             pause.isHidden = true
@@ -167,16 +167,19 @@ class ViewControllerTrain: UIViewController {
     
     ///У лейбла таймера выставит соотвествующее значение, изменит размер шрифта для интервала повторений
     private func changeFontAndValueForTimeLabel() {
-        if let time = checkTypeInterval()?["time"] {
-            let tmp = Double(time) ?? 0.0
-            timeForRound = tmp
-            tmpTimeForRound = tmp
+        if let _ = checkTypeInterval()?["time"] {
+//            let tmp = Double(time) ?? 0.0
+//            timeForRound = tmp
+//            tmpTimeForRound = tmp
             self.time.font = UIFont.monospacedDigitSystemFont(ofSize: 70, weight: .regular)
-            self.time.text = TimeFormatter.formatter(time: tmp)
-        } else if let exercise = checkTypeInterval()?["exercise"] {
+//            self.time.text = TimeFormatter.formatter(time: tmp)
+        } else if let _ = checkTypeInterval()?["exercise"] {
             self.time.font = UIFont.systemFont(ofSize: 48, weight: UIFont.Weight.regular)
             self.time.textAlignment = .justified
-            self.time.text = "Повторов: \(exercise)"
+//            self.time.text = "Повторов: \(exercise)"
+        } else {
+            self.time.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.regular)
+            self.time.textAlignment = .justified
         }
     }
     
@@ -193,14 +196,17 @@ class ViewControllerTrain: UIViewController {
         
         if roundsTrainingQQ?.count == 0 {
             stopAction(stop)
+            changeFontAndValueForTimeLabel()
             self.time.text = "Допрыгался!"
         } else if let time = checkTypeInterval()?["time"] {
             nextButton.isHidden = true
             pause.isHidden = false
             timeForRound = Double(time) ?? 0.0
+            changeFontAndValueForTimeLabel()
             startAction(start)
         } else if let exercise = checkTypeInterval()?["exercise"] {
             nextButton.isHidden = false
+            changeFontAndValueForTimeLabel()
             self.time.text = "Повторов: \(exercise)"
         }
     }
@@ -215,11 +221,10 @@ class ViewControllerTrain: UIViewController {
         
         timerForInterval.invalidate()
         
-        print(timeForRound)
-        timeForRound += dateStart.timeIntervalSinceNow
-        currentTimeOfRound = timeForRound
+        currentTimeOfRound = dateStart.timeIntervalSinceNow
     }
     
+    ///Кнопка "Дальше". Появляется, когда пользователь нажал на паузу
     @IBAction func continueAction(_ sender: UIButton) {
         dateTraining += datePause.timeIntervalSinceNow
         pause.isHidden = false
@@ -228,11 +233,9 @@ class ViewControllerTrain: UIViewController {
         start.isHidden = true
         continueLabel.isHidden = true
         
-        if timeForRound != tmpTimeForRound {
-            timeForRound = currentTimeOfRound
-            startAction(start)
-            currentTimeOfRound = 00.00
-        }
+        startAction(start)
+        dateStart += currentTimeOfRound
+        
     }
     
     @IBAction func stopAction(_ sender: UIButton) {
@@ -313,15 +316,18 @@ class ViewControllerTrain: UIViewController {
             //Завершени тренировки, если не осталось интервалов
             if roundsTrainingQQ?.count == 0 {
                 stopAction(stop)
+                changeFontAndValueForTimeLabel()
                 self.time.text = "Допрыгался!"
             } else if let time = checkTypeInterval()?["time"] {
                 pause.isHidden = false
                 nextButton.isHidden = true
                 timeForRound = Double(time) ?? 0.0
+                changeFontAndValueForTimeLabel()
                 startAction(start)
             } else if let exercise = checkTypeInterval()?["exercise"] {
                 pause.isHidden = true
                 nextButton.isHidden = false
+                changeFontAndValueForTimeLabel()
                 self.time.text = "Повторов: \(exercise)"
                 startAction(start)
             }

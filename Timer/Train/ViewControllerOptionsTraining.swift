@@ -27,8 +27,6 @@ class ViewControllerOptionsTraining: UIViewController {
     ///Тренировка представлена в виде кол-ва раундов (здесь элемент под индексом 0) и  интервалами повторений или времени (здесь элемент массива, который под индексом 1)
     /// [[2], [20, 5.0, 2.0, 20]]
     var training: [[String]] = [["1"], ["1", "5.0"]]
-    ///Колбэк для передачи данных о текущей тренировке
-    var clouserTableTraining: (([[Any]]) -> Void)?
     
     ///Значение для нового интервала. При добавлении нового интервала он всегда будет временным и с указанным значением
     private var newInterval = "5.0"
@@ -54,8 +52,6 @@ class ViewControllerOptionsTraining: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         let tmpTrain = ["train" : self.training]
         notificationCenter.post(name: .training, object: self, userInfo: tmpTrain)
-        
-        clouserTableTraining?(training)
     }
     
     @IBAction func addTimeAction(_ sender: Any) {
@@ -74,7 +70,6 @@ class ViewControllerOptionsTraining: UIViewController {
         notificationCenter.post(name: .training, object: self, userInfo: train)
         
         SaverLoader.save(value: self.training, for: "trainOptions")
-        print("Сохранение при добавлении интервала", self.training)
     }
     
     @IBAction func stepperForNumRoundsAction(_ sender: UIStepper) {
@@ -92,7 +87,6 @@ class ViewControllerOptionsTraining: UIViewController {
         notificationCenter.post(name: .training, object: self, userInfo: notifTrain)
         
         SaverLoader.save(value: self.training, for: "trainOptions")
-        print("Сохранение при изменении кол-ва раундов", self.training)
     }
 }
 
@@ -122,7 +116,6 @@ extension ViewControllerOptionsTraining: UITableViewDelegate, UITableViewDataSou
             cell.clouserStepperValue = { item in
             
                 self.training[1][indexPath.row] = "\(item)"
-                self.clouserTableTraining?(self.training)
                 
                 let train = ["train" : self.training]
                 self.notificationCenter.post(name: .training, object: self, userInfo: train)
@@ -141,7 +134,6 @@ extension ViewControllerOptionsTraining: UITableViewDelegate, UITableViewDataSou
             cell.clouserStepperValue = { item in
             
                 self.training[1][indexPath.row] = "\(item)"
-                self.clouserTableTraining?(self.training)
                 
                 let train = ["train" : self.training]
                 self.notificationCenter.post(name: .training, object: self, userInfo: train)
@@ -160,7 +152,6 @@ extension ViewControllerOptionsTraining: UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             training[1].remove(at: indexPath.row)
-            clouserTableTraining?(training)
             tableView.deleteRows(at: [indexPath], with: .fade)
             
             let train = ["train" : self.training]

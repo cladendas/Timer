@@ -14,8 +14,6 @@ class SaverLoader {
     static func save(value: [[String]]?, for key: String) {
         
         guard let value = value else { return }
-
-//        print("Будут сохраняться данные: ", value)
         
         UserDefaults.standard.set(value, forKey: key)
         UserDefaults.standard.synchronize()
@@ -25,7 +23,6 @@ class SaverLoader {
     static func load(for key: String) -> [[String]]? {
         
         if let object = UserDefaults.standard.object(forKey: key) as? [[String]] {
-//            print("Загружаются данные: ", object)
             return object
         }
         return nil

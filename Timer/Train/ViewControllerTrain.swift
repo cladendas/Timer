@@ -34,6 +34,8 @@ class ViewControllerTrain: UIViewController {
 
     ///Время старта тренировки
     var dateTraining = Date()
+    ///Для контроля старта тренировки. Т.к. время старта тренировки учитывается с момента нажатия кнопки СТАРТ и в дальнейшей работе таймера функционал кнопки СТАРТ задействуется неоднократно, данная переменная позволяет контролировать момент именно старта тренировки
+    var switchDateTraining = true
     ///Время старта интервала
     var dateStart = Date()
     ///Время нажатия на кнопку пауза
@@ -91,6 +93,13 @@ class ViewControllerTrain: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         notificationCenter.addObserver(self, selector: #selector(getNotification), name: .training, object: nil)
+        
+        if let time = checkTypeInterval()?["time"] {
+            let ff = Double(time) ?? 0.0
+            self.time.text = TimeFormatter.formatterQ(interval: ff)
+        } else if let exercise = checkTypeInterval()?["exercise"] {
+            self.time.text = "Повторов: \(exercise)"
+        }
     }
     
     ///Поиск в тренировке временного интервала
@@ -147,12 +156,10 @@ class ViewControllerTrain: UIViewController {
         SaverLoader.save(value: self.roundsTrainingQQ!, for: "train")
     }
     
-    var sw = true
-    
     @IBAction func startAction(_ sender: UIButton) {
-        if sw {
+        if switchDateTraining {
             dateTraining = Date()
-            sw = false
+            switchDateTraining = false
         }
         
         rep.isHidden = false
@@ -240,7 +247,7 @@ class ViewControllerTrain: UIViewController {
         optionsBarItem.isEnabled = true
         
         alertFinishTraining()
-        sw = true
+        switchDateTraining = true
         
         viewDidLoad()
     }

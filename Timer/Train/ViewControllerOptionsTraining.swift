@@ -150,16 +150,18 @@ extension ViewControllerOptionsTraining: UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            training[1].remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            
-            let train = ["train" : self.training]
-            self.notificationCenter.post(name: .training, object: self, userInfo: train)
-            
-            tableOfTraining.reloadData()
+        if training[1].count > 1 {
+            if editingStyle == .delete {
+                training[1].remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                
+                let train = ["train" : self.training]
+                self.notificationCenter.post(name: .training, object: self, userInfo: train)
+                
+                tableOfTraining.reloadData()
 
-            SaverLoader.save(value: self.training, for: "trainOptions")
+                SaverLoader.save(value: self.training, for: "trainOptions")
+            }
         }
     }
 }

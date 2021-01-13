@@ -151,7 +151,6 @@ class ViewControllerTrain: UIViewController {
             self.roundsTrainingQQ = Array(repeating: train[1], count: self.numOfRounds)
         }
         self.tableOfTraining.reloadData()
-        let _ = checkTypeInterval()
         
         SaverLoader.save(value: self.roundsTrainingQQ!, for: "train")
     }

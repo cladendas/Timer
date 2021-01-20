@@ -26,7 +26,7 @@ class ViewControllerTimer: UIViewController {
     
     ///Время старта
     ///- От него расчитываются интервалы
-    var dateStart = Date()
+    private var dateStart = Date()
     
     ///Таймер для раунда
     private var timerForRound = Timer()
@@ -44,7 +44,7 @@ class ViewControllerTimer: UIViewController {
     ///Переменная для хранения начального значения времени таймера отдыха (максимум 5999.99)
     private var tmpTimeForRes: Double = 0.0
     ///Какой таймер сейчас работает: true - идёт отсчёт времени для таймера раунда, иначе - для таймера отдыха
-    var switchRoundRes = true
+    private var switchRoundRes = true
     ///Кол-во раундов
     private var countOfRounds = 3
     ///Переменная для хранения начального значения кол-ва раундов
@@ -52,9 +52,9 @@ class ViewControllerTimer: UIViewController {
     ///Кол-во выполненных повторений
     private var countRep = 0
     ///Текущее время раунда
-    var currentTimeOfRound: Double = 00.00
+    private var currentTimeOfRound: Double = 00.00
     ///Текущее время отдыха
-    var currentTimeOfRes: Double = 00.00
+    private var currentTimeOfRes: Double = 00.00
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,7 +83,7 @@ class ViewControllerTimer: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if case let controller as ViewControllerRounds = segue.destination, segue.identifier == "Rounds" {
 
-            controller.clouserNumOfRounds = { num in
+            controller.clouserNumOfRounds = { [unowned self] num in
                 self.numberOfRounds.text = "Раундов \(num)/\(num)"
                 self.countOfRounds = num
                 self.tmpCountOfRounds = num

@@ -29,7 +29,7 @@ class ViewControllerRounds: UIViewController {
     var clouserTimeForRes: ((Double) -> Void)?
     
     ///Хранит данные о кол-ве раундов [0], времени раунда [1], времени отдыха [2]
-    var rounds = [[String]]()
+    private var rounds = [[String]]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,8 +49,6 @@ class ViewControllerRounds: UIViewController {
     }
     
     @IBAction func addRounds(_ sender: UIBarButtonItem) {
-        
-//        let tmp = formatInfoRound(round: "\(stepperForRound.value)", timeForRound: "\(stepperForTimeForRound.value)", timeForRes: "\(stepperForTimeRes.value)")
         
         rounds.append(["\(stepperForRound.value)", "\(stepperForTimeForRound.value)", "\(stepperForTimeRes.value)"])
         
@@ -81,7 +79,7 @@ class ViewControllerRounds: UIViewController {
     ///Преобразует  данные о кол-ве раундов, времени раунда, времени отдыха в формат для отображения в лейблах
     /// - кол-во раундов без точки
     /// - время для работы и отдыха в формате 00:00:00
-    func formatInfoRound(round: String, timeForRound: String, timeForRes: String) -> [String] {
+    private func formatInfoRound(round: String, timeForRound: String, timeForRes: String) -> [String] {
 
         let tmpRound = Int(Double(round) ?? 0.0)
         let tmpTimeForRound = Double(timeForRound) ?? 0.0
@@ -117,12 +115,15 @@ extension ViewControllerRounds: UITableViewDelegate, UITableViewDataSource {
         let tmpRound = formatInfoRound(round: rounds[indexPath.row][0], timeForRound: rounds[indexPath.row][1], timeForRes: rounds[indexPath.row][2])
         
         stepperForRound.value = Double(rounds[indexPath.row][0]) ?? 0.0
+        clouserNumOfRounds?(Int(stepperForRound.value))
         numberOfRounds.text = "Кол-во раундов: \(tmpRound[0])"
         
         stepperForTimeForRound.value = Double(rounds[indexPath.row][1]) ?? 6.0
+        clouserTimeForRound?(stepperForTimeForRound.value)
         timeForRound.text = "Время раунда: \(tmpRound[1])"
         
         stepperForTimeRes.value = Double(rounds[indexPath.row][2]) ?? 8.0
+        clouserTimeForRes?(stepperForTimeRes.value)
         timeForRes.text = "Время отдыха: \(tmpRound[2])"
     }
     

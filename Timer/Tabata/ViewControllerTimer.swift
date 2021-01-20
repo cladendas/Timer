@@ -207,6 +207,7 @@ class ViewControllerTimer: UIViewController {
             timeForRound = tmpTimeForRound
             countOfRounds -= 1
             numberOfRounds.text = "Раундов \(countOfRounds)/\(tmpCountOfRounds)"
+            timeLabel.text = TimeFormatter.formatterQ(interval: timeForRound)
             startRes()
             switchRoundRes = false
         } else {
@@ -220,6 +221,7 @@ class ViewControllerTimer: UIViewController {
             timerForRes.invalidate()
             //чтобы таймер стартовал с заданного значения
             timeForRes = tmpTimeForRes
+            timeLabelForRes.text = TimeFormatter.formatterQ(interval: timeForRes)
             startAction(start)
             switchRoundRes = true
         } else {

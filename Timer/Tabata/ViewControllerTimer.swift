@@ -43,6 +43,8 @@ class ViewControllerTimer: UIViewController {
     private var tmpTimeForRound: Double = 0.0
     ///Переменная для хранения начального значения времени таймера отдыха (максимум 5999.99)
     private var tmpTimeForRes: Double = 0.0
+    ///Какой таймер сейчас работает: true - идёт отсчёт времени для таймера раунда, иначе - для таймера отдыха
+    var switchRoundRes = true
     ///Кол-во раундов
     private var countOfRounds = 3
     ///Переменная для хранения начального значения кол-ва раундов
@@ -113,14 +115,14 @@ class ViewControllerTimer: UIViewController {
         
         timerForRound = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRound), userInfo: nil, repeats: true)
     }
-        
+    
     @IBAction func pauseAction(_ sender: UIButton) {
         pause.isHidden = true
         rep.isHidden = true
         stop.isHidden = false
         continueLabel.isHidden = false
         
-        currentTimeOfRound = timeForRound
+        currentTimeOfRound = dateStart.timeIntervalSinceNow
         currentTimeOfRes = timeForRes
         
         timerForRound.invalidate()
@@ -133,21 +135,18 @@ class ViewControllerTimer: UIViewController {
         stop.isHidden = true
         start.isHidden = true
         continueLabel.isHidden = true
-
-        if timeForRound != tmpTimeForRound {
-            timeForRound = currentTimeOfRound
-
+        
+        dateStart = Date()
+        dateStart += currentTimeOfRound
+        
+        if switchRoundRes {
             timerForRound = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRound), userInfo: nil, repeats: true)
+
+            currentTimeOfRound = 00.00
+        } else {
+             timerForRes = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRes), userInfo: nil, repeats: true)
             
             currentTimeOfRound = 00.00
-        }
-        
-        if timeForRes != tmpTimeForRes {
-            timeForRes = currentTimeOfRes
-
-            timerForRes = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRes), userInfo: nil, repeats: true)
-            
-            currentTimeOfRes = 00.00
         }
     }
     
@@ -162,6 +161,7 @@ class ViewControllerTimer: UIViewController {
         rep.isHidden = true
         continueLabel.isHidden = true
         optionsBarItem.isEnabled = true
+        switchRoundRes = true
         
         timeForRound = tmpTimeForRound
         timeForRes = tmpTimeForRes
@@ -207,6 +207,7 @@ class ViewControllerTimer: UIViewController {
             countOfRounds -= 1
             numberOfRounds.text = "Раундов \(countOfRounds)/\(tmpCountOfRounds)"
             startRes()
+            switchRoundRes = false
         } else {
             timeLabel.text = TimeFormatter.formatterQ(interval: timeForRound + dateStart.timeIntervalSinceNow)
         }
@@ -219,6 +220,7 @@ class ViewControllerTimer: UIViewController {
             //чтобы таймер стартовал с заданного значения
             timeForRes = tmpTimeForRes
             startAction(start)
+            switchRoundRes = true
         } else {
             timeLabelForRes.text = TimeFormatter.formatterQ(interval: timeForRes + dateStart.timeIntervalSinceNow)
         }

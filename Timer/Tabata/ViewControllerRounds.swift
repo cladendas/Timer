@@ -48,13 +48,11 @@ class ViewControllerRounds: UIViewController {
         }
     }
     
-    func convToString(_ value: Any) -> String {
-        return "\(value)"
-    }
-    
     @IBAction func addRounds(_ sender: UIBarButtonItem) {
         
-        rounds.append([convToString(stepperForRound.value), convToString(stepperForTimeForRound.value), convToString(stepperForTimeRes.value)])
+//        let tmp = formatInfoRound(round: "\(stepperForRound.value)", timeForRound: "\(stepperForTimeForRound.value)", timeForRes: "\(stepperForTimeRes.value)")
+        
+        rounds.append(["\(stepperForRound.value)", "\(stepperForTimeForRound.value)", "\(stepperForTimeRes.value)"])
         
         tableRounds.reloadData()
         
@@ -80,7 +78,9 @@ class ViewControllerRounds: UIViewController {
         timeForRes.text = "Время отдыха: \(tmpValue)"
     }
     
-    ///Преобразует в [String] данные о кол-ве раундов, времени раунда, времени отдыха
+    ///Преобразует  данные о кол-ве раундов, времени раунда, времени отдыха в формат для отображения в лейблах
+    /// - кол-во раундов без точки
+    /// - время для работы и отдыха в формате 00:00:00
     func formatInfoRound(round: String, timeForRound: String, timeForRes: String) -> [String] {
 
         let tmpRound = Int(Double(round) ?? 0.0)
@@ -105,24 +105,25 @@ extension ViewControllerRounds: UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellRounds", for: indexPath)
         
-        let row = formatInfoRound(round: rounds[indexPath.row][0], timeForRound: rounds[indexPath.row][1], timeForRes: rounds[indexPath.row][2])
+        let tmpRound = formatInfoRound(round: rounds[indexPath.row][0], timeForRound: rounds[indexPath.row][1], timeForRes: rounds[indexPath.row][2])
         
-        cell.textLabel?.text = "\(row[1]) - \(row[2]) /\(row[0])"
+        cell.textLabel?.text = "\(tmpRound[1]) - \(tmpRound[2]) / \(tmpRound[0])"
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let ff = formatInfoRound(round: rounds[indexPath.row][0], timeForRound: rounds[indexPath.row][1], timeForRes: rounds[indexPath.row][2])
+        let tmpRound = formatInfoRound(round: rounds[indexPath.row][0], timeForRound: rounds[indexPath.row][1], timeForRes: rounds[indexPath.row][2])
         
-        clouserNumOfRounds?(rounds[indexPath.row][0] as! Int)
-        clouserTimeForRound?(Double(rounds[indexPath.row][1]) as! Double)
-        clouserTimeForRes?(rounds[indexPath.row][2] as! Double)
+        stepperForRound.value = Double(rounds[indexPath.row][0]) ?? 0.0
+        numberOfRounds.text = "Кол-во раундов: \(tmpRound[0])"
         
-        numberOfRounds.text = "Кол-во раундов: \(ff[0])"
-        timeForRound.text = "Время раунда: \(ff[1])"
-        timeForRes.text = "Время отдыха: \(ff[2])"
+        stepperForTimeForRound.value = Double(rounds[indexPath.row][1]) ?? 6.0
+        timeForRound.text = "Время раунда: \(tmpRound[1])"
+        
+        stepperForTimeRes.value = Double(rounds[indexPath.row][2]) ?? 8.0
+        timeForRes.text = "Время отдыха: \(tmpRound[2])"
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

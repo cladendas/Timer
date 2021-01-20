@@ -83,7 +83,7 @@ class ViewControllerTimer: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if case let controller as ViewControllerRounds = segue.destination, segue.identifier == "Rounds" {
 
-            controller.clouserNumOfRounds = { [unowned self] num in
+            controller.clouserNumOfRounds = { num in
                 self.numberOfRounds.text = "Раундов \(num)/\(num)"
                 self.countOfRounds = num
                 self.tmpCountOfRounds = num
@@ -111,6 +111,7 @@ class ViewControllerTimer: UIViewController {
         numberRep.isHidden = false
         optionsBarItem.isEnabled = false
         
+        switchRoundRes = true
         dateStart = Date()
         
         timerForRound = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRound), userInfo: nil, repeats: true)

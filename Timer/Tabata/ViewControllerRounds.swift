@@ -17,9 +17,14 @@ class ViewControllerRounds: UIViewController {
     
     @IBOutlet var tableRounds: UITableView!
     
+    ///Лэйбл степпера кол-ва раундов
     @IBOutlet var stepperForRound: UIStepper!
+    ///Лэйбл степпера времени раунда
     @IBOutlet var stepperForTimeForRound: UIStepper!
+    ///Лэйбл степпера времени отдыха
     @IBOutlet var stepperForTimeRes: UIStepper!
+    
+    private var notificationCenter = NotificationCenter.default
     
     ///Кол-во раундов
     var clouserNumOfRounds: ((Int) -> Void)?
@@ -46,6 +51,15 @@ class ViewControllerRounds: UIViewController {
         } else {
             rounds = []
         }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        let tmpTrain = ["tabata" : ["\(stepperForRound.value)","\(stepperForTimeForRound.value)","\(stepperForTimeRes.value)"]]
+        notificationCenter.post(name: .training, object: self, userInfo: tmpTrain)
+    }
+    
+    deinit {
+        notificationCenter.removeObserver(self)
     }
     
     @IBAction func addRounds(_ sender: UIBarButtonItem) {

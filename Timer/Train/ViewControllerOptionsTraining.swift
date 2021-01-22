@@ -11,6 +11,7 @@ import UIKit
 extension NSNotification.Name {
     static let interval = NSNotification.Name.init("interval")
     static let training = NSNotification.Name.init("train")
+    static let tabata = NSNotification.Name.init("tabata")
     static let tmp = NSNotification.Name.init("tmp")
 }
 

@@ -14,7 +14,9 @@ class ViewControllerTimer: UIViewController {
     @IBOutlet var optionsBarItem: UIBarButtonItem!
     @IBOutlet var timeLabel: UILabel!
     @IBOutlet var timeLabelForRes: UILabel!
+    ///Кол-во повторений
     @IBOutlet var numberRep: UILabel!
+    ///Кол-во раундов
     @IBOutlet var numberOfRounds: UILabel!
     
     @IBOutlet var start: UIButton!
@@ -23,6 +25,8 @@ class ViewControllerTimer: UIViewController {
     @IBOutlet var rep: UIButton!
 
     @IBOutlet var continueLabel: UIButton!
+    
+    private var notificationCenter = NotificationCenter.default
     
     ///Время старта
     ///- От него расчитываются интервалы
@@ -51,10 +55,8 @@ class ViewControllerTimer: UIViewController {
     private var tmpCountOfRounds = 0
     ///Кол-во выполненных повторений
     private var countRep = 0
-    ///Текущее время раунда
-    private var currentTimeOfRound: Double = 00.00
-    ///Текущее время отдыха
-    private var currentTimeOfRes: Double = 00.00
+    ///Интервал от времени dateStart
+    private var timeIntervalFromDateStart: Double = 00.00
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,27 +81,30 @@ class ViewControllerTimer: UIViewController {
         numberRep.text = String(countRep)
     }
     
-    //Здесь захватывается numberOfRounds, чтобы выставить в него кол-во раундов
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if case let controller as ViewControllerRounds = segue.destination, segue.identifier == "Rounds" {
-
-            controller.clouserNumOfRounds = { [unowned self] num in
-                self.numberOfRounds.text = "Раундов \(num)/\(num)"
-                self.countOfRounds = num
-                self.tmpCountOfRounds = num
-            }
-
-            controller.clouserTimeForRound = { [unowned self] time in
-                self.timeLabel.text = TimeFormatter.formatter(time: time)
-                self.timeForRound = time
-                self.tmpTimeForRound = time
-            }
-
-            controller.clouserTimeForRes = { [unowned self] time in
-                self.timeLabelForRes.text = TimeFormatter.formatter(time: time)
-                self.timeForRes = time
-                self.tmpTimeForRes = time
-            }
+    override func viewWillAppear(_ animated: Bool) {
+        notificationCenter.addObserver(self, selector: #selector(getNotification), name: .training, object: nil)
+    }
+    
+    deinit {
+        notificationCenter.removeObserver(self)
+    }
+    
+    @objc
+    func getNotification(notification: Notification) {
+        guard let item = notification.userInfo as? [String: [String]] else { return }
+        
+        if let train = item["tabata"] {
+            self.countOfRounds = Int(Double(train[0])!)
+            self.numberOfRounds.text = "Раундов \(self.countOfRounds)/\(self.countOfRounds)"
+            self.tmpCountOfRounds = self.countOfRounds
+            
+            self.timeForRound = Double(train[1]) ?? 0.0
+            self.tmpTimeForRound = timeForRound
+            self.timeLabel.text = TimeFormatter.formatter(time: timeForRound)
+            
+            self.timeForRes = Double(train[2]) ?? 0.0
+            self.tmpTimeForRes = timeForRes
+            self.timeLabelForRes.text = TimeFormatter.formatter(time: timeForRes)
         }
     }
     
@@ -123,8 +128,7 @@ class ViewControllerTimer: UIViewController {
         stop.isHidden = false
         continueLabel.isHidden = false
         
-        currentTimeOfRound = dateStart.timeIntervalSinceNow
-        currentTimeOfRes = timeForRes
+        timeIntervalFromDateStart = dateStart.timeIntervalSinceNow
         
         timerForRound.invalidate()
         timerForRes.invalidate()
@@ -138,16 +142,16 @@ class ViewControllerTimer: UIViewController {
         continueLabel.isHidden = true
         
         dateStart = Date()
-        dateStart += currentTimeOfRound
+        dateStart += timeIntervalFromDateStart
         
         if switchRoundRes {
             timerForRound = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRound), userInfo: nil, repeats: true)
 
-            currentTimeOfRound = 00.00
+            timeIntervalFromDateStart = 00.00
         } else {
              timerForRes = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerUpdateForRes), userInfo: nil, repeats: true)
             
-            currentTimeOfRound = 00.00
+            timeIntervalFromDateStart = 00.00
         }
     }
     

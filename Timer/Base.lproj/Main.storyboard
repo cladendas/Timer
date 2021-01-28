@@ -239,11 +239,12 @@
                         <segue destination="BYZ-38-t0r" kind="relationship" relationship="viewControllers" id="6zt-yA-qSY"/>
                         <segue destination="UFj-5P-Myw" kind="relationship" relationship="viewControllers" id="ReQ-yK-7pV"/>
                         <segue destination="eiy-ub-KMp" kind="relationship" relationship="viewControllers" id="RnS-6i-55S"/>
+                        <segue destination="hjM-iY-gp7" kind="relationship" relationship="viewControllers" id="Ul9-Vw-vPb"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tSm-rI-qsM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-204" y="680"/>
+            <point key="canvasLocation" x="-322" y="636"/>
         </scene>
         <!--View Controller Timer-->
         <scene sceneID="3a4-lU-GrO">
@@ -837,6 +838,62 @@
             </objects>
             <point key="canvasLocation" x="941" y="1254"/>
         </scene>
+        <!--Результаты-->
+        <scene sceneID="CwM-AS-Q8C">
+            <objects>
+                <tableViewController id="hjM-iY-gp7" customClass="Results" customModule="Timer" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="DAl-RF-Jqo">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <navigationBar key="tableHeaderView" contentMode="scaleToFill" id="l2n-Ix-7JF">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <items>
+                                <navigationItem id="DOZ-y7-fgs">
+                                    <barButtonItem key="rightBarButtonItem" systemItem="add" id="kRG-T4-rwW"/>
+                                </navigationItem>
+                            </items>
+                        </navigationBar>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CellResults" rowHeight="147" id="Hq2-Zx-TYZ" customClass="ResultsCell" customModule="Timer" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="72" width="414" height="147"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Hq2-Zx-TYZ" id="Uz4-PH-cGl">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="147"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="1) warm-up: 5m 2) Amrap'10m - DU: 70 - SC: 60% lbs to 10 rep 3) rest'3 4) swim: 2 km ----64 min" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="XWm-h8-nE3">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="147"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                            <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        </textView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="XWm-h8-nE3" firstAttribute="leading" secondItem="Uz4-PH-cGl" secondAttribute="leading" id="K2N-Uf-6An"/>
+                                        <constraint firstAttribute="trailing" secondItem="XWm-h8-nE3" secondAttribute="trailing" id="eBC-BW-u80"/>
+                                        <constraint firstItem="XWm-h8-nE3" firstAttribute="top" secondItem="Uz4-PH-cGl" secondAttribute="top" id="p1w-Qs-ypO"/>
+                                        <constraint firstAttribute="bottom" secondItem="XWm-h8-nE3" secondAttribute="bottom" id="uAZ-c0-LFg"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="hjM-iY-gp7" id="obt-5a-O9h"/>
+                            <outlet property="delegate" destination="hjM-iY-gp7" id="rGT-MQ-ZYU"/>
+                        </connections>
+                    </tableView>
+                    <tabBarItem key="tabBarItem" title="Результаты" image="book" catalog="system" id="pI7-4P-4Fx"/>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="8Dg-hr-0KB"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="r1x-d9-Agy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="946.37681159420299" y="1925.8928571428571"/>
+        </scene>
         <!--View Controller Options Training-->
         <scene sceneID="KAh-F1-S3K">
             <objects>
@@ -954,6 +1011,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="book" catalog="system" width="128" height="101"/>
         <image name="goforward.30.hi" catalog="system" width="121" height="128"/>
         <image name="stopwatch" catalog="system" width="121" height="128"/>
         <image name="timer" catalog="system" width="128" height="121"/>

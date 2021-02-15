@@ -14,21 +14,16 @@ class CellStopwatch: UITableViewCell {
     @IBOutlet var time: UILabel!
     @IBOutlet var best: UILabel!
     
-    func initCell (round: String, time: String, best: String) {
-        self.round.text = round
+    func initCell (round: String, time: String, isTheBest: String) {
+        self.round.text = "\(round) круг"
         self.time.text = time
         
-        if best == "Худший" {
+        if isTheBest == "Худший" {
             self.best.textColor = .red
-            self.best.text = best
+            self.best.text = isTheBest
         } else {
             self.best.textColor = .green
-            self.best.text = best
+            self.best.text = isTheBest
         }
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
     }
 }

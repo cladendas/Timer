@@ -57,7 +57,6 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
         RunLoop.main.add(timer, forMode: RunLoop.Mode.common)
     }
     
-    //Когда свайпишь таблицу с кругами, то отсчёт времени останавливается, а когда отпускаешь - время идёт дальше, а таблица при нажатии на кнопку "Круг" не пролистывается к последнему значению
     @IBAction func roundAction(_ sender: UIButton) {
         let round = timeLabel.text ?? "00:00:00"
         rounds.insert(round, at: 0)
@@ -112,19 +111,17 @@ class ViewControllerStopwatch: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! CellStopwatch
 
-        //Фиксация времен круга идёт в формате "номер круга) MM:ss:msms
-        //Номер круга выводится, как результат разницы rounds.count - indexPath.row
-        let tmpRound = "\(rounds.count - indexPath.row) круг"
-        let tmpTime = "\(rounds[indexPath.row])"
-        var tmpBest = ""
+        var isTheBest = ""
         
         if rounds[indexPath.row] == rounds.min() {
-            tmpBest = "Лучший"
+            isTheBest = "Лучший"
         } else if rounds[indexPath.row] == rounds.max() {
-            tmpBest = "Худший"
+            isTheBest = "Худший"
         }
         
-        cell.initCell(round: tmpRound, time: tmpTime, best: tmpBest)
+        //Фиксация времен круга идёт в формате "номер круга) MM:ss:msms
+        //Номер круга выводится, как результат разницы rounds.count - indexPath.row
+        cell.initCell(round: "\(rounds.count - indexPath.row)", time: "\(rounds[indexPath.row])", isTheBest: isTheBest)
         
         return cell
     }
